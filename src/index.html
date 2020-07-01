@@ -21,23 +21,10 @@
         }, 1000);
     }*/
 
-    var linksFileContent = "";
-    if (local) {
-      linksFileContent = "https://www.youtube.com/watch?v=z1obnaqPgMA
-      https://www.youtube.com/watch?v=B8Yyf6WKgaM"
-    }
-
-      linksFileName = "YouTube_Links.txt";
+      linksFileURL = "https://raw.githubusercontent.com/Skwiwel/YT-Drive-Project/master/YouTube_Links.txt";
       function initJson() {
-        var pathArray = window.location.pathname.split('/');
-        var newPathname = "";
-        for (i = 0; i < pathArray.length-1; i++) {
-          newPathname += "/";
-          newPathname += pathArray[i];
-        }
-        file = window.location.protocol + "//" + window.location.host + "/" + newPathname + "/" + linksFileName;
         var rawFile = new XMLHttpRequest();
-        rawFile.open("GET", file, false);
+        rawFile.open("GET", linksFileURL, false);
         rawFile.onreadystatechange = function () {
             if(rawFile.readyState === 4) {
                 if(rawFile.status === 200 || rawFile.status == 0) {
@@ -57,7 +44,7 @@
 
       videoStartTime = 0;
 
-      //initJson();
+      initJson();
 
       // 2. This code loads the IFrame Player API code asynchronously.
       var tag = document.createElement('script');
