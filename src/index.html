@@ -8,7 +8,7 @@
     <div id="player"></div>
 
     <script>
-
+      var local = true;
       /*window.onload = function(){
         var iframe = document.createElement('iframe');
         iframe.id = 'iframe';
@@ -20,6 +20,12 @@
             alert(text);
         }, 1000);
     }*/
+
+    var linksFileContent = "";
+    if (local) {
+      linksFileContent = "https://www.youtube.com/watch?v=z1obnaqPgMA
+      https://www.youtube.com/watch?v=B8Yyf6WKgaM"
+    }
 
       linksFileName = "YouTube_Links.txt";
       function initJson() {
