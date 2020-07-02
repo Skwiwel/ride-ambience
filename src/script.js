@@ -89,4 +89,8 @@ function findNextVideo() {
   return videos[i];
 }
 
+function VideoControls() {
+  this.enabled = getCookie("videoContols");
+}
+
 initJson();

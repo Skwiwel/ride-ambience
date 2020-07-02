@@ -1,6 +1,189 @@
 html,
 body {
+  font-family: Helvetica, sans-serif;
   margin: 0;
   height: 100%;
   overflow: hidden;
+}
+
+button {
+  border: 0;
+  outline: 0;
+}
+
+#player {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  z-index: -1;
+}
+
+.menu_container {
+  position: absolute;
+  color: white;
+  background-color: rgba(20, 20, 20, 0.3);
+  border-radius: 2px;
+  z-index: 0;
+}
+
+#main_menu_container {
+  right: 10px;
+  top: 10px;
+  padding: 5px 0;
+  width: 200px;
+  height: 400px;
+}
+
+.menu_item {
+  text-align: center;
+  color: black;
+  text-shadow: 0 0 1px #ffffff;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 1px;
+}
+
+.menu_item:hover {
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.main_menu_item {
+  padding: 5px 0;
+  margin: 2px 0;
+  width: 100%;
+}
+
+#video_controls_container {
+  left: 10%;
+  bottom: 0px;
+  margin: 0 auto;
+  padding: 0px 5px;
+  border-radius: 2px 2px 0 0;
+  width: 80%;
+  height: 30px;
+}
+
+.video_buttons {
+  display: inline-block;
+  margin: 0px 2px;
+  height: 100%;
+  width: 30px;
+}
+
+.video_time {
+  display: inline-block;
+  text-align: center;
+  margin: 0px 1px;
+  font-size: 20px;
+}
+
+#video_current_time {
+  text-align: right;
+  width: 50px;
+}
+
+#video_overall_time {
+  text-align: left;
+  width: 50px;
+}
+
+#video_progress_bar {
+  width: calc(100% - 200px);
+}
+
+/* Video slider */
+input[type="range"] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  display: inline-block;
+  width: 100%; /* Specific width is required for Firefox. */
+  height: 10px;
+  background: transparent; /* Otherwise white in Chrome */
+}
+input[type="range"]:focus {
+  outline: none;
+}
+/* Thumbs */
+/* Chrome */
+input[type="range"]::-webkit-slider-thumb {
+  border: 0px solid #000000;
+  height: 15px;
+  width: 2px;
+  border-radius: 0px;
+  background: white;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -5px;
+}
+/* Firefox */
+input[type="range"]::-moz-range-thumb {
+  border: 0px solid #000000;
+  height: 15px;
+  width: 2px;
+  border-radius: 0px;
+  background: white;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -5px;
+}
+/* IE */
+input[type="range"]::-ms-thumb {
+  border: 0px solid #000000;
+  height: 15px;
+  width: 2px;
+  border-radius: 0px;
+  background: white;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -5px;
+}
+/* Sliders */
+/* Chrome */
+input[type="range"]::-webkit-slider-runnable-track {
+  padding: 0 0;
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: grey;
+  outline: 0;
+}
+/* Firefox */
+input[type="range"]::-moz-range-progress {
+  padding: 0 0;
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: white;
+  outline: 0;
+}
+input[type="range"]::-moz-range-track {
+  padding: 0 0;
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: grey;
+  outline: 0;
+}
+/* IE */
+input[type="range"]::-ms-track {
+  padding: 0 0;
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: grey;
+  outline: 0;
+}
+input[type="range"]::-ms-fill-lower {
+  padding: 0 0;
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: white;
+  outline: 0;
+}
+input[type="range"]::-ms-fill-upper {
+  padding: 0 0;
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: grey;
+  outline: 0;
 }

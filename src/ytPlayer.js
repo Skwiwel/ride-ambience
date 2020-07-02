@@ -17,6 +17,10 @@ function onYouTubeIframeAPIReady() {
     videoId: videoId,
     playerVars: {
       fs: 0,
+      autoplay: 1,
+      controls: 0,
+      enablejsapi: 1,
+      iv_load_policy: 3,
       modestbranding: 1,
       start: 0,
     },
@@ -26,7 +30,10 @@ function onYouTubeIframeAPIReady() {
     },
   });
 }
-
+//player.controls = 0;
+for (const prop in player) {
+  console.log(`player.${prop} = ${player[prop]}`);
+}
 // The API will call this function when the video player is ready.
 function onPlayerReady(event) {
   videoId = findNextVideo();

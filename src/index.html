@@ -10,5 +10,23 @@
     <script src="cookieOperations.js"></script>
     <script src="script.js"></script>
     <script src="ytPlayer.js"></script>
+
+    <div class="menu_container" id="main_menu_container">
+      <button
+        class="menu_item main_menu_item"
+        id="yt_controls_enable_button"
+        onclick="toggleViedoControls()"
+      >
+        Enable video controls
+      </button>
+    </div>
+
+    <div class="menu_container" id="video_controls_container">
+      <button class="menu_item video_buttons" id="play">P</button>
+      <label class="video_time" id="video_current_time">0</label>
+      <label class="video_time">/</label>
+      <label class="video_time" id="video_overall_time">0</label>
+      <input type="range" id="video_progress_bar" min="0" max="100" />
+    </div>
   </body>
 </html>
