@@ -49,6 +49,14 @@ function increaseVideoWeight(video_id) {
   saveJson();
 }
 
+function updateVideoTime(video_id, time) {
+  JsonCookie.links[video_id].start = time;
+  if (JsonCookie.links[videoId].weight == undefined) {
+    JsonCookie.links[video_id].weight = 0;
+  }
+  saveJson();
+}
+
 function getVideoStart(video_id) {
   if (JsonCookie.links[video_id] == undefined) {
     return 0;
@@ -69,54 +77,16 @@ function findNextVideo() {
       videos.push(`${video}`);
     }
   }
+  // If every weight > 0 then subtract the weights by one. Subject to possibly change in the future.
+  if (lowestWeight > 0) {
+    for (const video in JsonCookie.links) {
+      JsonCookie.links[`${video}`].weight -= 1;
+    }
+  }
+  // Return a random video from the choosen ones.
   if (videos.length == 0) return "";
   var i = Math.floor(Math.random() * videos.length);
   return videos[i];
 }
 
 initJson();
-
-var videoId = "";
-
-// This code loads the IFrame Player API code asynchronously.
-var tag = document.createElement("script");
-
-tag.src = "https://www.youtube.com/iframe_api";
-var firstScriptTag = document.getElementsByTagName("script")[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-// This function creates an <iframe> (and YouTube player)
-// after the API code downloads.
-var player;
-function onYouTubeIframeAPIReady() {
-  player = new YT.Player("player", {
-    height: "100%",
-    width: "100%",
-    videoId: videoId,
-    playerVars: {
-      fs: 0,
-      modestbranding: 1,
-      start: 0,
-    },
-    events: {
-      onReady: onPlayerReady,
-      onStateChange: onPlayerStateChange,
-    },
-  });
-}
-
-// The API will call this function when the video player is ready.
-function onPlayerReady(event) {
-  videoId = findNextVideo();
-  event.target.cueVideoById(videoId, getVideoStart(videoId));
-  event.target.playVideo();
-}
-
-// The API calls this function when the player's state changes.
-function onPlayerStateChange(event) {
-  if (event.data == YT.PlayerState.ENDED) {
-    increaseVideoWeight(videoId);
-    videoId = findNextVideo();
-    player.loadVideoById({ videoId: videoId });
-  }
-}
