@@ -56,9 +56,21 @@ function onPlayerStateChange(event) {
   if (event.data == YT.PlayerState.ENDED) {
     videoList.increaseVideoWeight(VIDEO_ID);
     VIDEO_ID = findNextVideo();
-    player.loadVideoById({ VIDEO_ID: VIDEO_ID });
+    player.loadVideoById({ videoId: VIDEO_ID });
   }
 }
+
+document.addEventListener("progressBarInput", function (e) {
+  var newTime = player.getDuration() * (e.detail.value / e.detail.max);
+  // Skip video to new time.
+  player.seekTo(newTime);
+  // Update Video Controls time display
+  videoControls.updateTime(player.getCurrentTime(), player.getDuration());
+});
+
+document.addEventListener("playPause", function (e) {
+  e.detail == "pause" ? player.pauseVideo() : player.playVideo();
+});
 
 window.onbeforeunload = function () {
   // If the window is closed with only this much time left the video is considered finished

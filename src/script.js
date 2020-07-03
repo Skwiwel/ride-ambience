@@ -68,24 +68,55 @@ var videoList = new (function () {
 var videoControls = new (function () {
   _this = this;
   this.enabled = false;
+  play = true;
   containerDiv = document.getElementById("video_controls_container");
   currentTimeLabel = document.getElementById("video_current_time");
   overallTimeLabel = document.getElementById("video_overall_time");
   progressBar = document.getElementById("video_progress_bar");
+  this.progressBarMax = 100;
   this.toggleEnabled = function () {
     this.enabled = !this.enabled;
     updateVisibility();
     setCookie("videoControlsEnabled", this.enabled);
   };
+  this.togglePlay = function () {
+    play = !play;
+    document.dispatchEvent(
+      new CustomEvent("playPause", { detail: play ? "play" : "pause" })
+    );
+  };
   this.updateTime = function (timeCurr, timeOverall) {
-    currentTimeLabel.innerHTML = timeCurr;
-    overallTimeLabel.innerHTML = timeOverall;
+    currentTimeLabel.innerHTML = formatTime(timeCurr);
+    overallTimeLabel.innerHTML = formatTime(timeOverall);
   };
   this.updateProgressBar = function (timeCurr, timeOverall) {
-    progressBar.value = (timeCurr / timeOverall) * 100000;
+    progressBar.value = (timeCurr / timeOverall) * progressBar.max;
   };
   updateVisibility = function () {
     containerDiv.style.visibility = _this.enabled ? "visible" : "hidden";
+  };
+  // time formatting for display
+  function formatTime(time) {
+    if (time == undefined) return "-";
+    time = Math.round(time);
+
+    var hours = Math.floor(time / (60 * 60));
+    var minutes = Math.floor((time - hours) / 60);
+    var seconds = time - minutes * 60;
+
+    minutes = hours > 0 && minutes < 10 ? "0" + minutes : minutes;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+    var returnString = minutes + ":" + seconds;
+    if (hours > 0) returnString = hours + ":" + returnString;
+    return returnString;
+  }
+  progressBar.oninput = function () {
+    document.dispatchEvent(
+      new CustomEvent("progressBarInput", {
+        detail: { value: progressBar.value, max: progressBar.max },
+      })
+    );
   };
   // init
   {
@@ -109,10 +140,11 @@ function findNextVideo() {
       videos.push(`${video}`);
     }
   }
-  // If every weight > 0 then subtract the weights by one. Subject to possibly change in the future.
+  // If every weight > 0 then subtract the weights by one.
+  // Subject to possibly change in the future.
   if (lowestWeight > 0) {
     for (const video in videoList.links) {
-      VideoList.links[`${video}`].weight -= 1;
+      videoList.links[`${video}`].weight -= 1;
     }
   }
   // Return a random video from the choosen ones.
