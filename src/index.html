@@ -7,15 +7,11 @@
     <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
     <div id="player"></div>
 
-    <script src="cookieOperations.js"></script>
-    <script src="script.js"></script>
-    <script src="ytPlayer.js"></script>
-
     <div class="menu_container" id="main_menu_container">
       <button
         class="menu_item main_menu_item"
         id="yt_controls_enable_button"
-        onclick="toggleViedoControls()"
+        onclick="videoControls.toggleEnabled()"
       >
         Enable video controls
       </button>
@@ -28,5 +24,9 @@
       <label class="video_time" id="video_overall_time">0</label>
       <input type="range" id="video_progress_bar" min="0" max="100" />
     </div>
+
+    <script src="cookieOperations.js"></script>
+    <script src="script.js"></script>
+    <script src="ytPlayer.js"></script>
   </body>
 </html>

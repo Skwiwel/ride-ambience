@@ -37,14 +37,14 @@ for (const prop in player) {
 // The API will call this function when the video player is ready.
 function onPlayerReady(event) {
   videoId = findNextVideo();
-  event.target.cueVideoById(videoId, getVideoStart(videoId));
+  event.target.cueVideoById(videoId, videoList.getVideoStart(videoId));
   event.target.playVideo();
 }
 
 // The API calls this function when the player's state changes.
 function onPlayerStateChange(event) {
   if (event.data == YT.PlayerState.ENDED) {
-    increaseVideoWeight(videoId);
+    videoList.increaseVideoWeight(videoId);
     videoId = findNextVideo();
     player.loadVideoById({ videoId: videoId });
   }
@@ -58,9 +58,10 @@ window.onbeforeunload = function () {
 
   var currTime = player.getCurrentTime();
   if (player.getDuration() - currTime <= timeToEndCutoff) {
-    increaseVideoWeight(videoId);
+    videoList.increaseVideoWeight(videoId);
   } else {
-    if (currTime > timeFromBeginningCutoff) updateVideoTime(videoId, currTime);
-    else updateVideoTime(videoId, 0);
+    if (currTime > timeFromBeginningCutoff)
+      videoList.updateVideoTime(videoId, currTime);
+    else videoList.updateVideoTime(videoId, 0);
   }
 };
