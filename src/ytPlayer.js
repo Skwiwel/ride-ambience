@@ -1,4 +1,4 @@
-var videoId = "";
+var VIDEO_ID = "";
 
 // This code loads the IFrame Player API code asynchronously.
 var tag = document.createElement("script");
@@ -14,7 +14,7 @@ function onYouTubeIframeAPIReady() {
   player = new YT.Player("player", {
     height: "100%",
     width: "100%",
-    videoId: videoId,
+    videoId: VIDEO_ID,
     playerVars: {
       fs: 0,
       autoplay: 1,
@@ -36,17 +36,27 @@ for (const prop in player) {
 }
 // The API will call this function when the video player is ready.
 function onPlayerReady(event) {
-  videoId = findNextVideo();
-  event.target.cueVideoById(videoId, videoList.getVideoStart(videoId));
-  event.target.playVideo();
+  VIDEO_ID = findNextVideo();
+  // Load and play
+  player.cueVideoById(VIDEO_ID, videoList.getVideoStart(VIDEO_ID));
+  player.playVideo();
+  // Initial update of display
+  videoControls.updateTime(player.getCurrentTime(), player.getDuration());
+  updateDisplayInterval = setInterval(function () {
+    videoControls.updateTime(player.getCurrentTime(), player.getDuration());
+    videoControls.updateProgressBar(
+      player.getCurrentTime(),
+      player.getDuration()
+    );
+  }, 1000);
 }
 
 // The API calls this function when the player's state changes.
 function onPlayerStateChange(event) {
   if (event.data == YT.PlayerState.ENDED) {
-    videoList.increaseVideoWeight(videoId);
-    videoId = findNextVideo();
-    player.loadVideoById({ videoId: videoId });
+    videoList.increaseVideoWeight(VIDEO_ID);
+    VIDEO_ID = findNextVideo();
+    player.loadVideoById({ VIDEO_ID: VIDEO_ID });
   }
 }
 
@@ -58,10 +68,10 @@ window.onbeforeunload = function () {
 
   var currTime = player.getCurrentTime();
   if (player.getDuration() - currTime <= timeToEndCutoff) {
-    videoList.increaseVideoWeight(videoId);
+    videoList.increaseVideoWeight(VIDEO_ID);
   } else {
     if (currTime > timeFromBeginningCutoff)
-      videoList.updateVideoTime(videoId, currTime);
-    else videoList.updateVideoTime(videoId, 0);
+      videoList.updateVideoTime(VIDEO_ID, currTime);
+    else videoList.updateVideoTime(VIDEO_ID, 0);
   }
 };
