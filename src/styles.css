@@ -3,6 +3,7 @@
   --border-radius: calc(var(--button-vertical-size) / 2);
   --menu-margin: 10px;
   --menu-background: rgba(20, 20, 20, 0.3);
+  --button-icon-size: calc(var(--button-vertical-size) * 2 / 3);
 }
 
 html,
@@ -11,6 +12,7 @@ body {
   margin: 0;
   height: 100%;
   overflow: hidden;
+  font-size: 0;
 }
 
 button {
@@ -39,7 +41,7 @@ button {
   top: 60px;
   padding: 0;
   width: 200px;
-  height: 400px;
+  height: 300px;
 }
 
 .menu-item {
@@ -47,6 +49,11 @@ button {
   color: white;
   background: transparent;
   fill: white;
+  font-size: 14px;
+}
+
+.main-menu .menu-item {
+  width: 100%;
 }
 
 button.main-menu {
@@ -65,6 +72,26 @@ button.menu-item:hover {
 
 button.menu-item:active {
   background-color: rgba(60, 60, 60, 0.8);
+}
+
+.menu-container.radio-controls {
+  margin: 10px 0 0;
+}
+
+#radio-name-container {
+  margin: 0 auto 3px;
+  width: calc(100% - var(--button-vertical-size));
+  border-radius: 0;
+}
+#radio-button-container {
+  height: var(--button-vertical-size);
+}
+
+.radio-controls button {
+  margin: 0px;
+  height: var(--button-vertical-size) !important;
+  width: var(--button-vertical-size) !important;
+  cursor: pointer;
 }
 
 .menu-container.video-controls {
@@ -86,20 +113,28 @@ button.menu-item:active {
 
 .video-controls button {
   margin: 0px;
-  height: 100%;
+  height: var(--button-vertical-size);
   width: var(--button-vertical-size);
   cursor: pointer;
 }
 
-.video-controls button svg {
+button svg {
+  width: var(--button-icon-size);
+  height: var(--button-icon-size);
   position: fixed;
   /* the Jam svgs are around 24x24 px */
-  margin-top: -12px;
-  margin-left: -12px;
+  margin-top: calc(var(--button-icon-size) * -1 / 2);
+  margin-left: calc(var(--button-icon-size) * -1 / 2);
 }
 
-.video-controls button#play svg {
-  margin-left: -10px;
+button[id$="play"] svg {
+  margin-left: calc(var(--button-icon-size) * -1 / 2 + 1px);
+}
+button[id$="backward"] svg {
+  margin-left: calc(var(--button-icon-size) * -1 / 2 - 1px);
+}
+button[id$="forward"] svg {
+  margin-left: calc(var(--button-icon-size) * -1 / 2 + 2px);
 }
 
 #video-time-container {

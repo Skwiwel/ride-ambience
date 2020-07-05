@@ -15,10 +15,36 @@
       >
         Enable video controls
       </button>
+      <div
+        class="menu-item menu-container radio-controls"
+        id="radio-controls-container"
+      >
+        <div class="menu-item radio-controls" id="radio-name-container">
+          <label>radio name placeholder</label>
+        </div>
+        <audio id="radio-audio">
+          <source
+            src="http://musicbird.leanstream.co/JCB032-MP3"
+            type="audio/mpeg"
+          />
+          Your browser does not support the <code>audio</code> element.
+        </audio>
+        <div class="menu-item radio-controls" id="radio-button-container">
+          <button class="menu-item" id="radio-backward">
+            <span data-jam="backward" />
+          </button>
+          <button class="menu-item" id="radio-play" data-state="playing">
+            <span data-jam="play" />
+          </button>
+          <button class="menu-item" id="radio-forward">
+            <span data-jam="forward" />
+          </button>
+        </div>
+      </div>
     </div>
 
     <div class="menu-container video-controls" id="video-controls-container">
-      <button class="menu-item" id="play" onclick="videoControls.togglePlay()">
+      <button class="menu-item" id="video-play">
         <span data-jam="play" />
       </button>
       <div class="menu-item" id="video-time-container">

@@ -71,6 +71,7 @@ var videoControls = new (function () {
   this.enabled = false;
   play = true;
   containerDiv = document.getElementById("video-controls-container");
+  playButton = document.getElementById("video-play");
   currentTimeText = document.getElementById("video-current-time");
   overallTimeText = document.getElementById("video-overall-time");
   progressBar = document.getElementById("video-progress-bar");
@@ -86,6 +87,7 @@ var videoControls = new (function () {
       new CustomEvent("playPause", { detail: play ? "play" : "pause" })
     );
   };
+  playButton.onclick = this.togglePlay;
   this.updateTime = function (timeCurr, timeOverall) {
     currentTimeText.innerHTML = formatTime(timeCurr);
     overallTimeText.innerHTML = formatTime(timeOverall);
@@ -127,6 +129,21 @@ var videoControls = new (function () {
     else setCookie("videoControlsEnabled", "false");
     updateVisibility();
   }
+})();
+
+var radioControls = new (function () {
+  this.playing = true;
+  playButton = document.getElementById("radio-play");
+  backwardButton = document.getElementById("radio-backward");
+  forwardButton = document.getElementById("radio-forward");
+  audio = document.getElementById("radio-audio");
+  _this = this;
+  this.togglePlay = function () {
+    _this.playing = !_this.playing;
+    playButton.dataset.state = _this.playing ? "paused" : "playing";
+    _this.playing ? audio.play() : audio.pause();
+  };
+  playButton.onclick = this.togglePlay;
 })();
 
 function findNextVideo() {
