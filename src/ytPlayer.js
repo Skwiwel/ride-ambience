@@ -37,6 +37,7 @@ for (const prop in player) {
 // The API will call this function when the video player is ready.
 function onPlayerReady(event) {
   VIDEO_ID = findNextVideo();
+  console.log(VIDEO_ID);
   // Load and play
   player.cueVideoById(VIDEO_ID, videoList.getVideoStart(VIDEO_ID));
   player.playVideo();

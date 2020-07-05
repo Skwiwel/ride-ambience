@@ -1,3 +1,10 @@
+:root {
+  --button-vertical-size: 30px;
+  --border-radius: calc(var(--button-vertical-size) / 2);
+  --menu-margin: 10px;
+  --menu-background: rgba(20, 20, 20, 0.3);
+}
+
 html,
 body {
   font-family: Helvetica, sans-serif;
@@ -18,76 +25,106 @@ button {
   z-index: -1;
 }
 
-.menu_container {
+.menu-container {
   position: absolute;
+  padding: 0;
   color: white;
-  background-color: rgba(20, 20, 20, 0.3);
-  border-radius: 2px;
+  background-color: var(--menu-background);
+  border-radius: var(--border-radius);
   z-index: 0;
 }
 
-#main_menu_container {
-  right: 10px;
-  top: 10px;
-  padding: 5px 0;
+.menu-container.main-menu {
+  right: var(--menu-margin);
+  top: 60px;
+  padding: 0;
   width: 200px;
   height: 400px;
 }
 
-.menu_item {
+.menu-item {
   text-align: center;
-  color: black;
-  text-shadow: 0 0 1px #ffffff;
-  background-color: rgba(255, 255, 255, 0.8);
-  border-radius: 1px;
+  color: white;
+  background: transparent;
+  fill: white;
 }
 
-.menu_item:hover {
-  background-color: rgba(255, 255, 255, 1);
-}
-
-.main_menu_item {
+button.main-menu {
   padding: 5px 0;
   margin: 2px 0;
   width: 100%;
 }
 
-#video_controls_container {
+button.menu-item {
+  border-radius: var(--border-radius);
+}
+
+button.menu-item:hover {
+  background-color: rgba(50, 50, 50, 0.8);
+}
+
+button.menu-item:active {
+  background-color: rgba(60, 60, 60, 0.8);
+}
+
+.menu-container.video-controls {
+  display: flex;
   left: 10%;
-  bottom: 0px;
-  margin: 0 auto;
-  padding: 0px 5px;
-  border-radius: 2px 2px 0 0;
+  bottom: var(--menu-margin);
+  margin: auto;
+  padding: 0;
+  border-radius: var(--border-radius);
   width: 80%;
-  height: 30px;
+  height: var(--button-vertical-size);
 }
 
-.video_buttons {
+.video-controls .menu-item {
   display: inline-block;
-  margin: 0px 2px;
+  vertical-align: top;
   height: 100%;
-  width: 30px;
 }
 
-.video_time {
-  display: inline-block;
+.video-controls button {
+  margin: 0px;
+  height: 100%;
+  width: var(--button-vertical-size);
+  cursor: pointer;
+}
+
+.video-controls button svg {
+  position: fixed;
+  /* the Jam svgs are around 24x24 px */
+  margin-top: -12px;
+  margin-left: -12px;
+}
+
+.video-controls button#play svg {
+  margin-left: -10px;
+}
+
+#video-time-container {
+  margin: 0;
+  padding: 0;
+  width: 100px;
+  height: var(--button-vertical-size);
+}
+#video-time-container text {
+  margin: 0px;
   text-align: center;
-  margin: 0px 1px;
-  font-size: 20px;
+  font-size: 14px;
+  line-height: var(--button-vertical-size);
 }
-
-#video_current_time {
+#video-current-time {
   text-align: right;
-  width: 50px;
 }
-
-#video_overall_time {
+#video-overall-time {
   text-align: left;
-  width: 50px;
 }
 
-#video_progress_bar {
-  width: calc(100% - 200px);
+#video-progress-bar {
+  margin: 0;
+  padding: 0;
+  width: calc((100% - 145px));
 }
 
 /* Video slider */
@@ -105,35 +142,35 @@ input[type="range"]:focus {
 /* Chrome */
 input[type="range"]::-webkit-slider-thumb {
   border: 0px solid #000000;
-  height: 15px;
+  height: 10px;
   width: 2px;
-  border-radius: 0px;
+  border-radius: 1px;
   background: white;
   cursor: pointer;
   -webkit-appearance: none;
-  margin-top: -5px;
+  margin-top: -3px;
 }
 /* Firefox */
 input[type="range"]::-moz-range-thumb {
   border: 0px solid #000000;
-  height: 15px;
+  height: 10px;
   width: 2px;
-  border-radius: 0px;
+  border-radius: 1px;
   background: white;
   cursor: pointer;
   -webkit-appearance: none;
-  margin-top: -5px;
+  margin-top: -3px;
 }
 /* IE */
 input[type="range"]::-ms-thumb {
   border: 0px solid #000000;
-  height: 15px;
+  height: 10px;
   width: 2px;
-  border-radius: 0px;
+  border-radius: 1px;
   background: white;
   cursor: pointer;
   -webkit-appearance: none;
-  margin-top: -5px;
+  margin-top: -3px;
 }
 /* Sliders */
 /* Chrome */
@@ -144,6 +181,7 @@ input[type="range"]::-webkit-slider-runnable-track {
   cursor: pointer;
   background: grey;
   outline: 0;
+  border-radius: 2px;
 }
 /* Firefox */
 input[type="range"]::-moz-range-progress {
@@ -151,8 +189,9 @@ input[type="range"]::-moz-range-progress {
   width: 100%;
   height: 4px;
   cursor: pointer;
-  background: white;
+  background: grey;
   outline: 0;
+  border-radius: 2px;
 }
 input[type="range"]::-moz-range-track {
   padding: 0 0;
@@ -161,6 +200,7 @@ input[type="range"]::-moz-range-track {
   cursor: pointer;
   background: grey;
   outline: 0;
+  border-radius: 2px;
 }
 /* IE */
 input[type="range"]::-ms-track {
@@ -170,6 +210,7 @@ input[type="range"]::-ms-track {
   cursor: pointer;
   background: grey;
   outline: 0;
+  border-radius: 2px;
 }
 input[type="range"]::-ms-fill-lower {
   padding: 0 0;
@@ -178,6 +219,7 @@ input[type="range"]::-ms-fill-lower {
   cursor: pointer;
   background: white;
   outline: 0;
+  border-radius: 2px;
 }
 input[type="range"]::-ms-fill-upper {
   padding: 0 0;
@@ -186,4 +228,5 @@ input[type="range"]::-ms-fill-upper {
   cursor: pointer;
   background: grey;
   outline: 0;
+  border-radius: 2px;
 }

@@ -7,6 +7,7 @@ var videoList = new (function () {
     setCookie("VideoList", JSON.stringify(this.links));
   };
   this.increaseVideoWeight = function (videoId) {
+    if (videoId == "") return;
     if (this.links[videoId] != undefined) {
       this.links[videoId].start = 0;
       this.links[videoId].weight += 1;
@@ -69,10 +70,10 @@ var videoControls = new (function () {
   _this = this;
   this.enabled = false;
   play = true;
-  containerDiv = document.getElementById("video_controls_container");
-  currentTimeLabel = document.getElementById("video_current_time");
-  overallTimeLabel = document.getElementById("video_overall_time");
-  progressBar = document.getElementById("video_progress_bar");
+  containerDiv = document.getElementById("video-controls-container");
+  currentTimeText = document.getElementById("video-current-time");
+  overallTimeText = document.getElementById("video-overall-time");
+  progressBar = document.getElementById("video-progress-bar");
   this.progressBarMax = 100;
   this.toggleEnabled = function () {
     this.enabled = !this.enabled;
@@ -86,8 +87,8 @@ var videoControls = new (function () {
     );
   };
   this.updateTime = function (timeCurr, timeOverall) {
-    currentTimeLabel.innerHTML = formatTime(timeCurr);
-    overallTimeLabel.innerHTML = formatTime(timeOverall);
+    currentTimeText.innerHTML = formatTime(timeCurr);
+    overallTimeText.innerHTML = formatTime(timeOverall);
   };
   this.updateProgressBar = function (timeCurr, timeOverall) {
     progressBar.value = (timeCurr / timeOverall) * progressBar.max;

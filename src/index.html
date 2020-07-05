@@ -7,36 +7,37 @@
     <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
     <div id="player"></div>
 
-    <div class="menu_container" id="main_menu_container">
+    <div class="menu-container main-menu" id="main-menu-container">
       <button
-        class="menu_item main_menu_item"
-        id="yt_controls_enable_button"
+        class="menu-item main-menu"
+        id="yt-controls-enable-button"
         onclick="videoControls.toggleEnabled()"
       >
         Enable video controls
       </button>
     </div>
 
-    <div class="menu_container" id="video_controls_container">
-      <button
-        class="menu_item video_buttons"
-        id="play"
-        onclick="videoControls.togglePlay()"
-      >
-        P
+    <div class="menu-container video-controls" id="video-controls-container">
+      <button class="menu-item" id="play" onclick="videoControls.togglePlay()">
+        <span data-jam="play" />
       </button>
-      <label class="video_time" id="video_current_time">-</label>
-      <label class="video_time">/</label>
-      <label class="video_time" id="video_overall_time">-</label>
+      <div class="menu-item" id="video-time-container">
+        <text id="video-current-time">-</text>
+        <text id="video-slash-time">/</text>
+        <text id="video-overall-time">-</text>
+      </div>
       <input
         type="range"
-        id="video_progress_bar"
+        class="menu-item"
+        id="video-progress-bar"
         min="0"
         max="100"
         step="0.0000000001"
+        value="0"
       />
     </div>
 
+    <script src="https://unpkg.com/jam-icons/js/jam.min.js"></script>
     <script src="cookieOperations.js"></script>
     <script src="script.js"></script>
     <script src="ytPlayer.js"></script>
