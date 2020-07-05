@@ -135,6 +135,8 @@ var radioControls = new (function () {
   playButton = document.getElementById("radio-play");
   backwardButton = document.getElementById("radio-backward");
   forwardButton = document.getElementById("radio-forward");
+  volumeButton = document.getElementById("radio-volume");
+  volumeSlider = document.getElementById("radio-volume-slider");
   audio = document.getElementById("radio-audio");
   _this = this;
   this.togglePlay = function () {
@@ -143,6 +145,35 @@ var radioControls = new (function () {
     _this.playing ? audio.play() : audio.pause();
   };
   playButton.onclick = this.togglePlay;
+  this.toggleMute = function () {
+    audio.muted = !audio.muted;
+    updateVolumeButton();
+  };
+  volumeButton.onclick = this.toggleMute;
+  volumeSlider.oninput = function () {
+    console.log(volumeSlider.value);
+    audio.muted = false;
+    audio.volume = volumeSlider.value;
+    updateVolumeButton();
+  };
+  // The icons are implemented as fonts and chosen based on class name
+  updateVolumeButton = function () {
+    if (audio.muted) {
+      volumeButton.lastChild.className = "jam jam-volume-mute";
+    } else if (audio.volume > 0.5) {
+      volumeButton.lastChild.className = "jam jam-volume-up";
+    } else if (audio.volume > 0) {
+      volumeButton.lastChild.className = "jam jam-volume-down";
+    } else {
+      volumeButton.lastChild.className = "jam jam-volume";
+    }
+  };
+  // init
+  {
+    audio.volume = 0.75;
+    volumeSlider.value = audio.volume;
+    updateVolumeButton();
+  }
 })();
 
 function findNextVideo() {

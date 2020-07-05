@@ -109,10 +109,17 @@ button#radio-forward {
   margin-right: auto;
 }
 button#radio-volume {
+  z-index: 3; /* for proper interaction with the expanding slider */
   position: absolute;
   display: block;
   bottom: 0;
   right: 0;
+  /* Since the icon is dynamically changed font icon is used. */
+  font-size: 20px;
+  text-align: center;
+  line-height: var(--button-vertical-size);
+}
+button#radio-volume[data-state="muted"] svg {
 }
 #radio-volume-slider-container {
   position: absolute;
@@ -137,9 +144,6 @@ button#radio-volume {
       0/100% 100%,
     linear-gradient(#fff, #fff);
   mask-composite: exclude;
-}
-button#radio-volume:hover {
-  z-index: 3;
 }
 button#radio-volume:hover + #radio-volume-slider-container,
 #radio-volume-slider-container:hover {
