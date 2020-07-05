@@ -77,9 +77,9 @@ var videoControls = new (function () {
   progressBar = document.getElementById("video-progress-bar");
   this.progressBarMax = 100;
   this.toggleEnabled = function () {
-    this.enabled = !this.enabled;
+    _this.enabled = !_this.enabled;
     updateVisibility();
-    setCookie("videoControlsEnabled", this.enabled);
+    setCookie("videoControlsEnabled", _this.enabled);
   };
   this.togglePlay = function () {
     play = !play;
@@ -123,8 +123,7 @@ var videoControls = new (function () {
   };
   // init
   {
-    var temp = getCookie("videoControlsEnabled");
-    if (temp == "true") this.enabled = true;
+    if (getCookie("videoControlsEnabled") == "true") this.enabled = true;
     // if the cookie value is not set or is set to incorrect value
     else setCookie("videoControlsEnabled", "false");
     updateVisibility();

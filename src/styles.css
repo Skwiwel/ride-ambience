@@ -2,8 +2,12 @@
   --button-vertical-size: 30px;
   --border-radius: calc(var(--button-vertical-size) / 2);
   --menu-margin: 10px;
-  --menu-background: rgba(20, 20, 20, 0.3);
+  --menu-background-color: rgba(20, 20, 20, 0.3);
   --button-icon-size: calc(var(--button-vertical-size) * 2 / 3);
+  --main-menu-width: 200px;
+  --main-menu-height: 200px;
+  --button-hover-color: rgba(50, 50, 50, 1);
+  --button-click-color: rgba(10, 10, 10, 1);
 }
 
 html,
@@ -31,7 +35,7 @@ button {
   position: absolute;
   padding: 0;
   color: white;
-  background-color: var(--menu-background);
+  background-color: var(--menu-background-color);
   border-radius: var(--border-radius);
   z-index: 0;
 }
@@ -40,8 +44,8 @@ button {
   right: var(--menu-margin);
   top: 60px;
   padding: 0;
-  width: 200px;
-  height: 300px;
+  width: var(--main-menu-width);
+  height: var(--main-menu-height);
 }
 
 .menu-item {
@@ -50,6 +54,7 @@ button {
   background: transparent;
   fill: white;
   font-size: 14px;
+  border-radius: var(--border-radius);
 }
 
 .main-menu .menu-item {
@@ -63,15 +68,16 @@ button.main-menu {
 }
 
 button.menu-item {
-  border-radius: var(--border-radius);
+  transition: 0.15s;
 }
 
 button.menu-item:hover {
-  background-color: rgba(50, 50, 50, 0.8);
+  background-color: var(--button-hover-color);
+  transition: 0.05s;
 }
 
 button.menu-item:active {
-  background-color: rgba(60, 60, 60, 0.8);
+  background-color: var(--button-click-color);
 }
 
 .menu-container.radio-controls {
@@ -84,14 +90,67 @@ button.menu-item:active {
   border-radius: 0;
 }
 #radio-button-container {
+  display: flex;
+  text-align: center;
   height: var(--button-vertical-size);
 }
 
 .radio-controls button {
-  margin: 0px;
+  display: inline-block;
+  margin: 0;
   height: var(--button-vertical-size) !important;
   width: var(--button-vertical-size) !important;
   cursor: pointer;
+}
+button#radio-backward {
+  margin-left: auto;
+}
+button#radio-forward {
+  margin-right: auto;
+}
+button#radio-volume {
+  position: absolute;
+  display: block;
+  bottom: 0;
+  right: 0;
+}
+#radio-volume-slider-container {
+  position: absolute;
+  display: block;
+  bottom: 0;
+  width: 0;
+  background-color: rgba(70, 70, 70, 1);
+  visibility: hidden;
+  right: calc(var(--button-vertical-size) * 1 / 2);
+  height: var(--button-vertical-size);
+  line-height: var(--button-vertical-size);
+  border-radius: var(--border-radius) 0 0 var(--border-radius);
+  transition: 0.5s;
+  /* Inverted mask in the shape of a circle */
+  /* so as not to clip with the volume button. */
+  /* hardcoded radius for now since CSS does not allow string concatenation */
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><circle cx="100%" cy="50%" r="15" fill="black"/></svg>')
+      0/100% 100%,
+    linear-gradient(#fff, #fff);
+  -webkit-mask-composite: destination-out;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><circle cx="100%" cy="50%" r="15" fill="black"/></svg>')
+      0/100% 100%,
+    linear-gradient(#fff, #fff);
+  mask-composite: exclude;
+}
+button#radio-volume:hover {
+  z-index: 3;
+}
+button#radio-volume:hover + #radio-volume-slider-container,
+#radio-volume-slider-container:hover {
+  transition: 0.5s;
+  padding: 0;
+  visibility: visible;
+  width: calc(var(--main-menu-width) - var(--border-radius));
+}
+#radio-volume-slider {
+  padding-right: var(--border-radius);
+  width: calc((100% - 3 * var(--border-radius)));
 }
 
 .menu-container.video-controls {
@@ -164,7 +223,7 @@ button[id$="forward"] svg {
 
 /* Video slider */
 input[type="range"] {
-  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  -webkit-appearance: none; /* Hides the slider so that a custom can be made */
   display: inline-block;
   width: 100%; /* Specific width is required for Firefox. */
   height: 10px;
