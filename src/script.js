@@ -1,5 +1,5 @@
-linksFileURL =
-  "https://raw.githubusercontent.com/Skwiwel/YT-Drive-Project/master/YouTube_Links.txt";
+videoLinksFileURL =
+  "https://raw.githubusercontent.com/Skwiwel/YT-Drive-Project/master/YouTube_Links";
 
 var videoList = new (function () {
   this.links = {};
@@ -39,7 +39,7 @@ var videoList = new (function () {
     }
 
     var rawFile = new XMLHttpRequest();
-    rawFile.open("GET", linksFileURL, false);
+    rawFile.open("GET", videoLinksFileURL, false);
     rawFile.onload = function () {
       if (
         rawFile.readyState === 4 &&
