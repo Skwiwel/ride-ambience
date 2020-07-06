@@ -30,14 +30,9 @@ function onYouTubeIframeAPIReady() {
     },
   });
 }
-//player.controls = 0;
-for (const prop in player) {
-  console.log(`player.${prop} = ${player[prop]}`);
-}
 // The API will call this function when the video player is ready.
 function onPlayerReady(event) {
   VIDEO_ID = findNextVideo();
-  console.log(VIDEO_ID);
   // Load and play
   player.cueVideoById(VIDEO_ID, videoList.getVideoStart(VIDEO_ID));
   player.playVideo();

@@ -67,19 +67,19 @@ var videoList = new (function () {
 })();
 
 var videoControls = new (function () {
-  _this = this;
+  var _this = this;
   this.enabled = false;
-  play = true;
-  containerDiv = document.getElementById("video-controls-container");
-  playButton = document.getElementById("video-play");
-  currentTimeText = document.getElementById("video-current-time");
-  overallTimeText = document.getElementById("video-overall-time");
-  progressBar = document.getElementById("video-progress-bar");
-  this.progressBarMax = 100;
+  var play = true;
+  var containerDiv = document.getElementById("video-controls-container");
+  var playButton = document.getElementById("video-play");
+  var currentTimeText = document.getElementById("video-current-time");
+  var overallTimeText = document.getElementById("video-overall-time");
+  var progressBar = document.getElementById("video-progress-bar");
+
   this.toggleEnabled = function () {
-    _this.enabled = !_this.enabled;
+    this.enabled = !this.enabled;
     updateVisibility();
-    setCookie("videoControlsEnabled", _this.enabled);
+    setCookie("videoControlsEnabled", this.enabled);
   };
   this.togglePlay = function () {
     play = !play;
@@ -96,7 +96,7 @@ var videoControls = new (function () {
     progressBar.value = (timeCurr / timeOverall) * progressBar.max;
   };
   updateVisibility = function () {
-    containerDiv.style.visibility = _this.enabled ? "visible" : "hidden";
+    containerDiv.dataset.enabled = _this.enabled;
   };
   // time formatting for display
   function formatTime(time) {
@@ -151,7 +151,6 @@ var radioControls = new (function () {
   };
   volumeButton.onclick = this.toggleMute;
   volumeSlider.oninput = function () {
-    console.log(volumeSlider.value);
     audio.muted = false;
     audio.volume = volumeSlider.value;
     updateVolumeButton();
