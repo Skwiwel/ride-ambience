@@ -68,7 +68,8 @@ document.addEventListener("playPause", function (e) {
   e.detail == "pause" ? player.pauseVideo() : player.playVideo();
 });
 
-window.onbeforeunload = function () {
+/* Save video important values to cookie before leaving site */
+window.addEventListener("beforeunload", function () {
   // If the window is closed with only this much time left the video is considered finished
   const timeToEndCutoff = 20;
   // If the window is closed with only this much time elapsed from the beggining the video is considered not started
@@ -82,4 +83,4 @@ window.onbeforeunload = function () {
       videoList.updateVideoTime(VIDEO_ID, currTime);
     else videoList.updateVideoTime(VIDEO_ID, 0);
   }
-};
+});
