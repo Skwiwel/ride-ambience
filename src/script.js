@@ -196,7 +196,8 @@ var videoControls = new (function () {
     time = Math.round(time);
 
     var hours = Math.floor(time / (60 * 60));
-    var minutes = Math.floor((time - hours) / 60);
+    time = time - hours * 60 * 60;
+    var minutes = Math.floor(time / 60);
     var seconds = time - minutes * 60;
 
     minutes = hours > 0 && minutes < 10 ? "0" + minutes : minutes;

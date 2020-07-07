@@ -10,6 +10,7 @@
   --main-menu-height: auto;
   --button-hover-color: rgba(50, 50, 50, 1);
   --button-click-color: rgba(10, 10, 10, 1);
+  --video-time-width: 120px;
 }
 
 html,
@@ -233,7 +234,7 @@ button#video-volume:hover + #video-volume-slider-container,
   transition: 0.5s;
   padding: 0;
   visibility: visible;
-  width: 115px;
+  width: calc(var(--border-radius) + var(--video-time-width) - 5px);
 }
 #video-volume-slider {
   padding-left: var(--border-radius);
@@ -274,7 +275,7 @@ button span.jam.jam-pause {
 #video-time-container {
   margin: 0;
   padding: 0;
-  width: 100px;
+  width: var(--video-time-width);
   height: var(--button-vertical-size);
 }
 #video-time-container text {
@@ -293,7 +294,13 @@ button span.jam.jam-pause {
 #video-progress-bar {
   margin: 0;
   padding: 0;
-  width: calc((100% - 175px));
+  width: calc(
+    100% -
+      (
+        2 * var(--button-vertical-size) + var(--video-time-width) +
+          var(--border-radius)
+      )
+  );
 }
 
 /* Video slider */
