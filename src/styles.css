@@ -189,6 +189,57 @@ button#radio-volume:hover + #radio-volume-slider-container,
   cursor: pointer;
 }
 
+#video-volume-container {
+  width: var(--button-vertical-size);
+  height: var(--button-vertical-size);
+}
+button#video-volume {
+  z-index: 3; /* for proper interaction with the expanding slider */
+  /* Since the icon is dynamically changed font icon is used. */
+  position: relative;
+  top: 0;
+  left: 0;
+  font-size: 20px;
+  text-align: center;
+  line-height: var(--button-vertical-size);
+}
+#video-volume-slider-container {
+  z-index: 1;
+  position: relative;
+  display: block;
+  top: calc(-1 * var(--button-vertical-size));
+  left: calc(var(--button-vertical-size) * 1 / 2);
+  width: 0;
+  height: var(--button-vertical-size);
+  background-color: rgba(70, 70, 70, 1);
+  visibility: hidden;
+  line-height: var(--button-vertical-size);
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+  transition: 0.5s;
+  /* Inverted mask in the shape of a circle */
+  /* so as not to clip with the volume button. */
+  /* hardcoded radius for now since CSS does not allow string concatenation */
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><circle cx="0%" cy="50%" r="15" fill="black"/></svg>')
+      0/100% 100%,
+    linear-gradient(#fff, #fff);
+  -webkit-mask-composite: destination-out;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><circle cx="0%" cy="50%" r="15" fill="black"/></svg>')
+      0/100% 100%,
+    linear-gradient(#fff, #fff);
+  mask-composite: exclude;
+}
+button#video-volume:hover + #video-volume-slider-container,
+#video-volume-slider-container:hover {
+  transition: 0.5s;
+  padding: 0;
+  visibility: visible;
+  width: 115px;
+}
+#video-volume-slider {
+  padding-left: var(--border-radius);
+  width: calc((100% - 3 * var(--border-radius)));
+}
+
 button svg {
   width: var(--button-icon-size);
   height: var(--button-icon-size);
@@ -242,7 +293,7 @@ button span.jam.jam-pause {
 #video-progress-bar {
   margin: 0;
   padding: 0;
-  width: calc((100% - 145px));
+  width: calc((100% - 175px));
 }
 
 /* Video slider */

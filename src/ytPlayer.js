@@ -33,6 +33,10 @@ function onYouTubeIframeAPIReady() {
 // The API will call this function when the video player is ready.
 function onPlayerReady(event) {
   VIDEO_ID = findNextVideo();
+  // Set volume
+  videoControls.getMute() ? player.mute() : player.unMute();
+  player.setVolume(videoControls.getVolume() * 100);
+  console.log(videoControls.getVolume());
   // Load and play
   player.cueVideoById(VIDEO_ID, videoList.getVideoStart(VIDEO_ID));
   player.playVideo();
@@ -66,6 +70,14 @@ document.addEventListener("progressBarInput", function (e) {
 
 document.addEventListener("playPause", function (e) {
   e.detail == "pause" ? player.pauseVideo() : player.playVideo();
+});
+
+document.addEventListener("videoVolumeToggleMute", function (e) {
+  e.detail == "mute" ? player.mute() : player.unMute();
+});
+document.addEventListener("videoVolumeSliderInput", function (e) {
+  console.log(e.detail.volume / e.detail.max);
+  player.setVolume((e.detail.volume / e.detail.max) * 100);
 });
 
 /* Save video important values to cookie before leaving site */

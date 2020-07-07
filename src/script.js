@@ -139,8 +139,12 @@ var videoControls = new (function () {
   var _this = this;
   this.enabled = false;
   var play = true;
+  muted = false;
+  volume = 0.75;
   var containerDiv = document.getElementById("video-controls-container");
   var playButton = document.getElementById("video-play");
+  var volumeButton = document.getElementById("video-volume");
+  var volumeSlider = document.getElementById("video-volume-slider");
   var currentTimeText = document.getElementById("video-current-time");
   var overallTimeText = document.getElementById("video-overall-time");
   var progressBar = document.getElementById("video-progress-bar");
@@ -173,6 +177,15 @@ var videoControls = new (function () {
     } else {
       playButton.lastChild.className = "jam jam-play";
     }
+    if (muted) {
+      volumeButton.lastChild.className = "jam jam-volume-mute";
+    } else if (volume > 0.5) {
+      volumeButton.lastChild.className = "jam jam-volume-up";
+    } else if (volume > 0) {
+      volumeButton.lastChild.className = "jam jam-volume-down";
+    } else {
+      volumeButton.lastChild.className = "jam jam-volume";
+    }
   };
   updateVisibility = function () {
     containerDiv.dataset.enabled = _this.enabled;
@@ -200,13 +213,55 @@ var videoControls = new (function () {
       })
     );
   };
+  this.getMute = function () {
+    return muted;
+  };
+  this.setMute = function (mute) {
+    muted = mute;
+    document.dispatchEvent(
+      new CustomEvent("videoVolumeToggleMute", {
+        detail: muted ? "mute" : "unmute",
+      })
+    );
+    updateButtonAppearance();
+  };
+  this.toggleMute = function () {
+    _this.setMute(!muted);
+  };
+  volumeButton.onclick = this.toggleMute;
+  this.getVolume = function () {
+    return volume;
+  };
+  this.setVolume = function (vol, max) {
+    volume = vol;
+    document.dispatchEvent(
+      new CustomEvent("videoVolumeSliderInput", {
+        detail: { volume: vol, max: max },
+      })
+    );
+    updateButtonAppearance();
+  };
+  volumeSlider.oninput = function () {
+    _this.setVolume(volumeSlider.value, volumeSlider.max);
+  };
   // init
   {
     if (getCookie("videoControlsEnabled") == "true") this.enabled = true;
     // if the cookie value is not set or is set to incorrect value
     else setCookie("videoControlsEnabled", "false");
     updateVisibility();
+
+    var cookieContentFloat = parseFloat(getCookie("videoVolume"));
+    _this.setVolume(cookieContentFloat == NaN ? 0.75 : cookieContentFloat);
+    volumeSlider.value = volume;
+    cookieContentString = getCookie("videoMuted");
+    _this.setMute(cookieContentString == "true" ? true : false);
     updateButtonAppearance();
+
+    window.addEventListener("beforeunload", function () {
+      setCookie("videoVolume", volume);
+      setCookie("videoMuted", muted);
+    });
   }
 })();
 
@@ -234,10 +289,6 @@ var radioControls = new (function () {
     updateAudioPlaying();
   };
   playButton.onclick = this.togglePlay;
-  this.toggleMute = function () {
-    audio.muted = !audio.muted;
-    updateVolumeButton();
-  };
   backwardButton.onclick = function () {
     radioList.prev();
     audio.src = radioList.getURL();
@@ -249,6 +300,10 @@ var radioControls = new (function () {
     audio.src = radioList.getURL();
     nameLabel.innerHTML = radioList.getName();
     updateAudioPlaying();
+  };
+  this.toggleMute = function () {
+    audio.muted = !audio.muted;
+    updateVolumeButton();
   };
   volumeButton.onclick = this.toggleMute;
   volumeSlider.oninput = function () {

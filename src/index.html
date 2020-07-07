@@ -57,6 +57,21 @@
       <button class="menu-item" id="video-play">
         <span class="jam jam-play" />
       </button>
+      <div class="menu-item" id="video-volume-container">
+        <button class="menu-item" id="video-volume">
+          <span class="jam jam-volume-up" />
+        </button>
+        <div class="menu-item" id="video-volume-slider-container">
+          <input
+            type="range"
+            id="video-volume-slider"
+            min="0"
+            max="1"
+            step="0.001"
+            value="0"
+          />
+        </div>
+      </div>
       <div class="menu-item" id="video-time-container">
         <text id="video-current-time">-</text>
         <text id="video-slash-time">/</text>
