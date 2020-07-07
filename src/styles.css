@@ -4,6 +4,8 @@
   --menu-margin: 10px;
   --menu-background-color: rgba(20, 20, 20, 0.3);
   --button-icon-size: calc(var(--button-vertical-size) * 2 / 3);
+  --button-font-icon-top-margin: calc(var(--button-icon-size) * -1 / 2 - 1px);
+  --button-font-icon-left-margin: calc(var(--button-icon-size) * -1 / 2 + 1px);
   --main-menu-width: 200px;
   --main-menu-height: 200px;
   --button-hover-color: rgba(50, 50, 50, 1);
@@ -204,6 +206,18 @@ button[id$="backward"] svg {
 }
 button[id$="forward"] svg {
   margin-left: calc(var(--button-icon-size) * -1 / 2 + 2px);
+}
+/* Font Jam icon specific styles */
+button span.jam {
+  display: inline-block;
+  font-size: 20px;
+  position: fixed;
+  /* the Jam svgs are around 24x24 px */
+  margin-top: var(--button-font-icon-top-margin);
+  margin-left: var(--button-font-icon-left-margin);
+}
+button span.jam.jam-pause {
+  margin-left: calc(var(--button-font-icon-left-margin) - 1px);
 }
 
 #video-time-container {

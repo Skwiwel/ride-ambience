@@ -152,6 +152,8 @@ var videoControls = new (function () {
   };
   this.togglePlay = function () {
     play = !play;
+    updateButtonAppearance();
+    /* Dispatch event for a video player */
     document.dispatchEvent(
       new CustomEvent("playPause", { detail: play ? "play" : "pause" })
     );
@@ -163,6 +165,14 @@ var videoControls = new (function () {
   };
   this.updateProgressBar = function (timeCurr, timeOverall) {
     progressBar.value = (timeCurr / timeOverall) * progressBar.max;
+  };
+  updateButtonAppearance = function () {
+    /* Change play button appearance */
+    if (play) {
+      playButton.lastChild.className = "jam jam-pause";
+    } else {
+      playButton.lastChild.className = "jam jam-play";
+    }
   };
   updateVisibility = function () {
     containerDiv.dataset.enabled = _this.enabled;
@@ -196,6 +206,7 @@ var videoControls = new (function () {
     // if the cookie value is not set or is set to incorrect value
     else setCookie("videoControlsEnabled", "false");
     updateVisibility();
+    updateButtonAppearance();
   }
 })();
 
@@ -210,11 +221,16 @@ var radioControls = new (function () {
   audio = document.getElementById("radio-audio");
   _this = this;
   updateAudioPlaying = function () {
-    _this.playing ? audio.play() : audio.pause();
+    if (_this.playing) {
+      playButton.lastChild.className = "jam jam-pause";
+      audio.play();
+    } else {
+      playButton.lastChild.className = "jam jam-play";
+      audio.pause();
+    }
   };
   this.togglePlay = function () {
     _this.playing = !_this.playing;
-    playButton.dataset.state = _this.playing ? "paused" : "playing";
     updateAudioPlaying();
   };
   playButton.onclick = this.togglePlay;
