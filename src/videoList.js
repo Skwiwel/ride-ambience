@@ -3,16 +3,18 @@ const videoLinksFileURL =
 
 var videoList = new (function () {
   this.links = {};
+  const defaultVideoStartTime = 30;
+
   this.save = function () {
     setCookie("VideoList", JSON.stringify(this.links));
   };
   this.increaseVideoWeight = function (videoId) {
     if (videoId == "") return;
     if (this.links[videoId] != undefined) {
-      this.links[videoId].start = 0;
+      this.links[videoId].start = defaultVideoStartTime;
       this.links[videoId].weight += 1;
     } else {
-      this.links[videoId] = { start: 0, weight: 1 };
+      this.links[videoId] = { start: defaultVideoStartTime, weight: 1 };
     }
     this.save();
   };
@@ -80,7 +82,7 @@ var videoList = new (function () {
           }
           // if the id is new to the cookie add it
           if (_this.links[videoId] == undefined) {
-            _this.links[videoId] = { start: 0, weight: 0 };
+            _this.links[videoId] = { start: defaultVideoStartTime, weight: 0 };
           }
         });
         setCookie("VideoList", JSON.stringify(_this.links));
