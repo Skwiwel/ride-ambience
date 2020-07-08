@@ -80,28 +80,3 @@ var radioControls = new (function () {
     });
   }
 })();
-
-function findNextVideo() {
-  var lowestWeight = Number.MAX_VALUE;
-  var videos = [];
-  for (const video in videoList.links) {
-    var newWeight = videoList.links[`${video}`].weight;
-    if (newWeight < lowestWeight) {
-      lowestWeight = newWeight;
-      videos = [`${video}`];
-    } else if (newWeight == lowestWeight) {
-      videos.push(`${video}`);
-    }
-  }
-  // If every weight > 0 then subtract the weights by one.
-  // Subject to possibly change in the future.
-  if (lowestWeight > 0) {
-    for (const video in videoList.links) {
-      videoList.links[`${video}`].weight -= 1;
-    }
-  }
-  // Return a random video from the choosen ones.
-  if (videos.length == 0) return "";
-  var i = Math.floor(Math.random() * videos.length);
-  return videos[i];
-}

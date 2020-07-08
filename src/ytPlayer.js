@@ -32,7 +32,7 @@ function onYouTubeIframeAPIReady() {
 }
 // The API will call this function when the video player is ready.
 function onPlayerReady(event) {
-  VIDEO_ID = findNextVideo();
+  VIDEO_ID = videoList.findNextVideo();
   // Set volume
   videoControls.getMute() ? player.mute() : player.unMute();
   player.setVolume(videoControls.getVolume() * 100);
@@ -54,7 +54,7 @@ function onPlayerReady(event) {
 function onPlayerStateChange(event) {
   if (event.data == YT.PlayerState.ENDED) {
     videoList.increaseVideoWeight(VIDEO_ID);
-    VIDEO_ID = findNextVideo();
+    VIDEO_ID = videoList.findNextVideo();
     player.loadVideoById({ videoId: VIDEO_ID });
   }
 }
