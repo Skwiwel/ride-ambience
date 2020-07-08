@@ -1,4 +1,4 @@
-function EmittingObject(val = undefined) {
+function EmittingVariable(val = undefined) {
   var value = val;
   var listeners = [];
   this.set = function (val) {
