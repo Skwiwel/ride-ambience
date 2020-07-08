@@ -6,7 +6,7 @@
   --button-icon-size: calc(var(--button-vertical-size) * 2 / 3);
   --button-font-icon-top-margin: calc(var(--button-icon-size) * -1 / 2 - 1px);
   --button-font-icon-left-margin: calc(var(--button-icon-size) * -1 / 2 + 1px);
-  --main-menu-width: 200px;
+  --main-menu-width: 180px;
   --main-menu-height: auto;
   --button-hover-color: rgba(50, 50, 50, 1);
   --button-click-color: rgba(10, 10, 10, 1);
@@ -23,6 +23,7 @@ body {
 }
 
 button {
+  cursor: pointer;
   border: 0;
   outline: 0;
 }
@@ -66,16 +67,12 @@ button {
   border-radius: var(--border-radius);
 }
 
-.main-menu .menu-item {
-  width: 100%;
-}
-
-button.main-menu {
-  padding: 5px 0;
+.main-menu > .menu-item {
   width: 100%;
 }
 
 button.menu-item {
+  height: var(--button-vertical-size);
   transition: 0.15s;
 }
 
@@ -86,6 +83,15 @@ button.menu-item:hover {
 
 button.menu-item:active {
   background-color: var(--button-click-color);
+}
+
+button.checkbox {
+  text-align: center;
+  /*padding-left: calc(var(--button-vertical-size) + 5px);*/
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><circle cx="15px" cy="50%" r="6px" stroke="white" stroke-width="2px" fill="transparent"/></svg>');
+}
+button.checkbox[data-state="true"] {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><circle cx="15px" cy="50%" r="6px" stroke="white" stroke-width="2px" fill="transparent"/><circle cx="15px" cy="50%" r="3px" fill="white"/></svg>');
 }
 
 .menu-container.radio-controls {
