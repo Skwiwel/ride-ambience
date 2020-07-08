@@ -36,7 +36,6 @@ function onPlayerReady(event) {
   // Set volume
   videoControls.getMute() ? player.mute() : player.unMute();
   player.setVolume(videoControls.getVolume() * 100);
-  console.log(videoControls.getVolume());
   // Load and play
   player.cueVideoById(VIDEO_ID, videoList.getVideoStart(VIDEO_ID));
   player.playVideo();

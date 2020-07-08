@@ -135,12 +135,44 @@ var radioList = new (function () {
   }
 })();
 
-var videoControls = new (function () {
+var globalSettings = new (function () {
+  this.videoControls = new EmittingVariable(false);
   var _this = this;
-  this.enabled = false;
+
+  this.videoControls.addListener(function () {
+    setCookie("videoControls", _this.videoControls.get());
+  });
+  // init
+  {
+    /* Enable video controls if they were enabled last time */
+    if (getCookie("videoControls") == "true") this.videoControls.set(true);
+    // If the cookie value is not set or is set to incorrect value
+    else setCookie("videoControls", "false");
+  }
+})();
+
+var mainMenu = new (function () {
+  const container = document.getElementById("main-menu-container");
+  const buttonVideoControls = document.getElementById(
+    "video-controls-enable-button"
+  );
+  buttonVideoControls.onclick = function () {
+    globalSettings.videoControls.set(!globalSettings.videoControls.get());
+  };
+  updateVideoControlsButton = function () {
+    buttonVideoControls.dataset.state = globalSettings.videoControls.get();
+  };
+  globalSettings.videoControls.addListener(updateVideoControlsButton);
+  // init
+  {
+    updateVideoControlsButton();
+  }
+})();
+
+var videoControls = new (function () {
   var play = true;
-  muted = false;
-  volume = 0.75;
+  var muted = false;
+  var volume = 0.75;
   var containerDiv = document.getElementById("video-controls-container");
   var playButton = document.getElementById("video-play");
   var volumeButton = document.getElementById("video-volume");
@@ -149,11 +181,8 @@ var videoControls = new (function () {
   var overallTimeText = document.getElementById("video-overall-time");
   var progressBar = document.getElementById("video-progress-bar");
 
-  this.toggleEnabled = function () {
-    this.enabled = !this.enabled;
-    updateVisibility();
-    setCookie("videoControlsEnabled", this.enabled);
-  };
+  const _this = this;
+
   this.togglePlay = function () {
     play = !play;
     updateButtonAppearance();
@@ -188,8 +217,9 @@ var videoControls = new (function () {
     }
   };
   updateVisibility = function () {
-    containerDiv.dataset.enabled = _this.enabled;
+    containerDiv.dataset.enabled = globalSettings.videoControls.get();
   };
+  globalSettings.videoControls.addListener(updateVisibility);
   // time formatting for display
   function formatTime(time) {
     if (time == undefined) return "-";
@@ -247,9 +277,6 @@ var videoControls = new (function () {
   };
   // init
   {
-    if (getCookie("videoControlsEnabled") == "true") this.enabled = true;
-    // if the cookie value is not set or is set to incorrect value
-    else setCookie("videoControlsEnabled", "false");
     updateVisibility();
 
     var cookieContentFloat = parseFloat(getCookie("videoVolume"));
