@@ -7,7 +7,6 @@ var mainMenu = new (function () {
 
   buttonFullscreen.onclick = function () {
     globalSettings.fullscreen.set(!globalSettings.fullscreen.get());
-    console.log(globalSettings.fullscreen.get());
   };
   updateFullscreenButton = function () {
     buttonFullscreen.dataset.state = globalSettings.fullscreen.get();
