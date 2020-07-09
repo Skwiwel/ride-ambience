@@ -75,7 +75,6 @@ document.addEventListener("videoVolumeToggleMute", function (e) {
   e.detail == "mute" ? player.mute() : player.unMute();
 });
 document.addEventListener("videoVolumeSliderInput", function (e) {
-  console.log(e.detail.volume / e.detail.max);
   player.setVolume((e.detail.volume / e.detail.max) * 100);
 });
 

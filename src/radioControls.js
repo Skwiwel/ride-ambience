@@ -63,14 +63,14 @@ var radioControls = new (function () {
     nameLabel.innerHTML = radioList.getName();
 
     var cookieContentFloat = parseFloat(getCookie("radioVolume"));
-    audio.volume = cookieContentFloat == NaN ? 0.75 : cookieContentFloat;
+    audio.volume = isNaN(cookieContentFloat) ? 0.3 : cookieContentFloat;
     volumeSlider.value = audio.volume;
     cookieContentString = getCookie("radioMuted");
     audio.muted = cookieContentString == "true" ? true : false;
     updateVolumeButton();
 
     cookieContentString = getCookie("radioPlay");
-    _this.playing = cookieContentString == "true" ? true : false;
+    _this.playing = cookieContentString == "false" ? false : true;
     updateAudioPlaying();
 
     window.addEventListener("beforeunload", function () {

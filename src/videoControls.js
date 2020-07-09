@@ -109,7 +109,10 @@ var videoControls = new (function () {
     updateVisibility();
 
     var cookieContentFloat = parseFloat(getCookie("videoVolume"));
-    _this.setVolume(cookieContentFloat == NaN ? 0.75 : cookieContentFloat);
+    _this.setVolume(
+      isNaN(cookieContentFloat) ? 0.75 : cookieContentFloat,
+      volumeSlider.max
+    );
     volumeSlider.value = volume;
     cookieContentString = getCookie("videoMuted");
     _this.setMute(cookieContentString == "true" ? true : false);
