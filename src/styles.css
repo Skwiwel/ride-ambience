@@ -87,6 +87,8 @@ button.menu-item {
 
 button.menu-item:hover {
   background-color: var(--button-hover-color);
+  /* Helps hide browser rendered border-radius related visual artifacts */
+  box-shadow: 0 0 1px 0 var(--button-hover-color);
   transition: 0.05s;
 }
 
