@@ -27,7 +27,7 @@ The app includes a Dockerfile with which a container image with an Nginx server 
 
 ## Planned Features
 
-The app's basic functionality is finished, but there are still many features to be added. Among the bigger ones are these:
+The app's basic functionality is finished, but there are still many features to be added and bugs to be fixed. Among the bigger planned features are these:
 - [ ] YT video list management through UI
 - [ ] Radio Station list management through UI (by the use of the radio-browser API)
 - [ ] Individual video and radio volume / start time customization
