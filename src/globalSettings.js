@@ -1,4 +1,5 @@
 var globalSettings = new (function () {
+  this.settingsOpen = new EmittingVariable(false);
   this.videoControls = new EmittingVariable(false);
   this.fullscreen = new EmittingVariable(false);
   var _this = this;
