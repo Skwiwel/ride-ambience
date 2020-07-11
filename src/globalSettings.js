@@ -1,8 +1,13 @@
 var globalSettings = new (function () {
   this.settingsOpen = new EmittingVariable(false);
+  this.presetFetch = new EmittingVariable(true);
   this.videoControls = new EmittingVariable(false);
   this.fullscreen = new EmittingVariable(false);
   var _this = this;
+
+  this.presetFetch.addListener(function () {
+    setCookie("presetFetch", _this.presetFetch.get());
+  });
 
   this.videoControls.addListener(function () {
     setCookie("videoControls", _this.videoControls.get());
@@ -41,6 +46,11 @@ var globalSettings = new (function () {
 
   // init
   {
+    /* Disable preset fetch if it was disabled last time */
+    if (getCookie("presetFetch") == "false") this.presetFetch.set(false);
+    // If the cookie value is not set or is set to incorrect value
+    else setCookie("presetFetch", "true");
+
     /* Enable video controls if they were enabled last time */
     if (getCookie("videoControls") == "true") this.videoControls.set(true);
     // If the cookie value is not set or is set to incorrect value

@@ -64,30 +64,36 @@ var videoList = new (function () {
       _this.links = JSON.parse(cookieContentString);
     }
 
-    var rawFile = new XMLHttpRequest();
-    rawFile.open("GET", videoLinksFileURL, false);
-    rawFile.onload = function () {
-      if (
-        rawFile.readyState === 4 &&
-        (rawFile.status === 200 || rawFile.status == 0)
-      ) {
-        var links = rawFile.responseText.split("\n");
-        links.forEach((link) => {
-          if (link == "") return;
-          // get the id from yt URL
-          var videoId = link.split("v=")[1];
-          var ampersandPosition = videoId.indexOf("&");
-          if (ampersandPosition != -1) {
-            videoId = videoId.substring(0, ampersandPosition);
-          }
-          // if the id is new to the cookie add it
-          if (_this.links[videoId] == undefined) {
-            _this.links[videoId] = { start: defaultVideoStartTime, weight: 0 };
-          }
-        });
-        setCookie("VideoList", JSON.stringify(_this.links));
-      }
-    };
-    rawFile.send(null);
+    if (globalSettings.presetFetch.get()) {
+      console.log("Fetching preset video");
+      var rawFile = new XMLHttpRequest();
+      rawFile.open("GET", videoLinksFileURL, false);
+      rawFile.onload = function () {
+        if (
+          rawFile.readyState === 4 &&
+          (rawFile.status === 200 || rawFile.status == 0)
+        ) {
+          var links = rawFile.responseText.split("\n");
+          links.forEach((link) => {
+            if (link == "") return;
+            // get the id from yt URL
+            var videoId = link.split("v=")[1];
+            var ampersandPosition = videoId.indexOf("&");
+            if (ampersandPosition != -1) {
+              videoId = videoId.substring(0, ampersandPosition);
+            }
+            // if the id is new to the cookie add it
+            if (_this.links[videoId] == undefined) {
+              _this.links[videoId] = {
+                start: defaultVideoStartTime,
+                weight: 0,
+              };
+            }
+          });
+          setCookie("VideoList", JSON.stringify(_this.links));
+        }
+      };
+      rawFile.send(null);
+    }
   }
 })();
