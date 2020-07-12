@@ -31,6 +31,16 @@ button {
   cursor: pointer;
   border: 0;
   outline: 0;
+  transition: 0.15s;
+}
+button:hover {
+  background-color: var(--button-hover-color);
+  /* Helps hide browser rendered border-radius related visual artifacts */
+  box-shadow: 0 0 1px 0 var(--button-hover-color);
+  transition: 0.05s;
+}
+button:active {
+  background-color: var(--button-click-color);
 }
 
 #player {
@@ -88,18 +98,6 @@ button {
 
 button.menu-item {
   height: var(--button-vertical-size);
-  transition: 0.15s;
-}
-
-button.menu-item:hover {
-  background-color: var(--button-hover-color);
-  /* Helps hide browser rendered border-radius related visual artifacts */
-  box-shadow: 0 0 1px 0 var(--button-hover-color);
-  transition: 0.05s;
-}
-
-button.menu-item:active {
-  background-color: var(--button-click-color);
 }
 
 button.checkbox {
@@ -126,7 +124,7 @@ button.checkbox[data-state="true"] {
   height: var(--button-vertical-size);
 }
 
-.radio-controls button {
+.radio-controls > button {
   display: inline-block;
   margin: 0;
   height: var(--button-vertical-size) !important;
@@ -204,13 +202,67 @@ button#radio-volume:hover + #radio-volume-slider-container,
   transition: unset;
 }
 #settings-container[data-enabled="true"] {
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+}
+#settings-container * {
+  width: 100%;
 }
 
 .settings-menu > button.checkbox {
-  width: 100%;
   text-align: left;
   padding-left: var(--button-vertical-size);
+}
+
+#settings-tab-selector-container {
+  margin-top: 5px;
+  height: 20px;
+  border-bottom: solid 1px var(--button-hover-color);
+}
+#settings-tab-selector-container > button {
+  height: 100%;
+  width: calc(3 * var(--button-vertical-size));
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  background-color: var(--submenu-hover-volor);
+  color: white;
+  line-height: 20px;
+  text-align: center;
+}
+#settings-tab-selector-container > button:hover {
+  background-color: var(--button-hover-color);
+}
+#settings-tab-selector-container > button[data-state="enabled"] {
+  background-color: var(--button-hover-color);
+}
+
+#settings-tab-container {
+  flex: 1;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+#settings-tab-container > * {
+  display: none;
+  height: 100%;
+  width: 100%;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+#video-list-container {
+}
+
+.list-object {
+  display: inline-block;
+  height: var(--button-vertical-size);
+  width: 100%;
+  /*background-color: var(--submenu-hover-volor);*/
+  border-bottom: solid 1px var(--submenu-hover-volor);
+  border-radius: 0;
+  transition: 0.15s;
+}
+.list-object:hover {
+  background-color: var(--button-hover-color);
+  /* Helps hide browser rendered border-radius related visual artifacts */
+  box-shadow: 0 0 1px 0 var(--button-hover-color);
+  transition: 0.05s;
 }
 
 .menu-container.video-controls {

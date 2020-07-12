@@ -5,17 +5,17 @@ var globalSettings = new (function () {
   this.fullscreen = new EmittingVariable(false);
   var _this = this;
 
-  this.presetFetch.addListener(function () {
-    setCookie("presetFetch", _this.presetFetch.get());
+  this.presetFetch.addListener(function (val) {
+    setCookie("presetFetch", val);
   });
 
-  this.videoControls.addListener(function () {
-    setCookie("videoControls", _this.videoControls.get());
+  this.videoControls.addListener(function (val) {
+    setCookie("videoControls", val);
   });
 
-  this.fullscreen.addListener(function () {
+  this.fullscreen.addListener(function (val) {
     const doc = document.documentElement;
-    if (_this.fullscreen.get() === true) {
+    if (val === true) {
       if (doc.requestFullscreen) {
         doc.requestFullscreen();
       } else if (doc.mozRequestFullScreen) {
