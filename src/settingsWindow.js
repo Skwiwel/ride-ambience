@@ -30,15 +30,15 @@ var settingsWindow = new (function () {
       });
       tabSelector.dataset.state = "enabled";
       tabs.forEach((tab) => {
-        tab.style.display = "none";
+        tab.dataset.enabled = false;
       });
-      targetTab.style.display = "inline-block";
+      targetTab.dataset.enabled = true;
     };
   });
 
   // init
   {
     tabSelectors[0].dataset.state = "enabled";
-    tabs[0].style.display = "inline-block";
+    tabs[0].dataset.enabled = true;
   }
 })();

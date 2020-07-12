@@ -11,8 +11,8 @@
   --main-menu-height: auto;
   --settings-menu-width: 500px;
   --settings-menu-height: 300px;
-  --menu-hover-volor: rgba(30, 30, 30, 1);
-  --submenu-hover-volor: rgba(50, 50, 50, 1);
+  --menu-hover-color: rgba(30, 30, 30, 1);
+  --submenu-hover-color: rgba(50, 50, 50, 1);
   --button-hover-color: rgba(90, 90, 90, 1);
   --button-click-color: rgba(70, 70, 70, 1);
   --video-time-width: 120px;
@@ -25,6 +25,16 @@ body {
   height: 100%;
   overflow: hidden;
   font-size: 0;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--button-hover-color);
 }
 
 button {
@@ -60,11 +70,11 @@ button:active {
   transition: 0.5s;
 }
 .menu-container:hover {
-  background-color: var(--menu-hover-volor);
+  background-color: var(--menu-hover-color);
   transition: 0.5s;
 }
 .menu-container > .menu-container:hover {
-  background-color: var(--submenu-hover-volor);
+  background-color: var(--submenu-hover-color);
   transition: 0.5s;
 }
 
@@ -194,27 +204,27 @@ button#radio-volume:hover + #radio-volume-slider-container,
   top: var(--main-menu-margin-top);
   width: var(--settings-menu-width);
   height: var(--settings-menu-height);
-  background-color: var(--menu-hover-volor);
+  background-color: var(--menu-hover-color);
   transition: unset;
 }
 #settings-container:hover {
-  background-color: var(--menu-hover-volor);
+  background-color: var(--menu-hover-color);
   transition: unset;
 }
 #settings-container[data-enabled="true"] {
   display: flex;
   flex-direction: column;
-}
-#settings-container * {
-  width: 100%;
+  align-items: stretch;
 }
 
 .settings-menu > button.checkbox {
+  flex: 0 0 auto;
   text-align: left;
   padding-left: var(--button-vertical-size);
 }
 
 #settings-tab-selector-container {
+  flex: 0 0 auto;
   margin-top: 5px;
   height: 20px;
   border-bottom: solid 1px var(--button-hover-color);
@@ -223,7 +233,7 @@ button#radio-volume:hover + #radio-volume-slider-container,
   height: 100%;
   width: calc(3 * var(--button-vertical-size));
   border-radius: var(--border-radius) var(--border-radius) 0 0;
-  background-color: var(--submenu-hover-volor);
+  background-color: var(--submenu-hover-color);
   color: white;
   line-height: 20px;
   text-align: center;
@@ -236,30 +246,59 @@ button#radio-volume:hover + #radio-volume-slider-container,
 }
 
 #settings-tab-container {
-  flex: 1;
+  flex: 1 1 auto;
+  height: 0;
   border-radius: 0 0 var(--border-radius) var(--border-radius);
+  padding: 0;
 }
 #settings-tab-container > * {
-  display: none;
   height: 100%;
   width: 100%;
+  display: none;
   border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
+#settings-tab-container > *[data-enabled="true"] {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
 
+.list-container {
+  flex: 1 1 auto;
+  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
 #video-list-container {
+  border-bottom: solid 1px var(--button-hover-color);
+}
+#video-list-add-container {
+  flex: 0 0 auto;
+  height: var(--button-vertical-size);
+  font-size: 14px;
+  line-height: var(--button-vertical-size);
+  margin-left: var(--button-vertical-size);
 }
 
 .list-object {
   display: inline-block;
   height: var(--button-vertical-size);
   width: 100%;
-  /*background-color: var(--submenu-hover-volor);*/
-  border-bottom: solid 1px var(--submenu-hover-volor);
+  /*background-color: var(--submenu-hover-color);*/
+  border-bottom: solid 1px var(--submenu-hover-color);
   border-radius: 0;
   transition: 0.15s;
+  font-size: 14px;
+  color: grey;
+  line-height: var(--button-vertical-size);
+  text-align: left;
+  padding: 0 5px 0 5px;
+}
+.list-object:last-of-type {
+  border-bottom: none;
 }
 .list-object:hover {
-  background-color: var(--submenu-hover-volor);
+  background-color: var(--submenu-hover-color);
   /* Helps hide browser rendered border-radius related visual artifacts */
   transition: 0.05s;
 }
