@@ -259,9 +259,8 @@ button#radio-volume:hover + #radio-volume-slider-container,
   transition: 0.15s;
 }
 .list-object:hover {
-  background-color: var(--button-hover-color);
+  background-color: var(--submenu-hover-volor);
   /* Helps hide browser rendered border-radius related visual artifacts */
-  box-shadow: 0 0 1px 0 var(--button-hover-color);
   transition: 0.05s;
 }
 
