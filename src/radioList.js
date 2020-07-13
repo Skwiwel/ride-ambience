@@ -1,5 +1,5 @@
 const radioListFileURL =
-  "https://raw.githubusercontent.com/Skwiwel/YT-Drive-Project/master/Radio_Links";
+  "https://raw.githubusercontent.com/Skwiwel/ride-ambience/master/Radio_Links";
 
 var radioList = new (function () {
   var _this = this;
@@ -28,31 +28,33 @@ var radioList = new (function () {
     if (cookieContentString != "") {
       _this.links = JSON.parse(cookieContentString);
     }
-    /* Load the preset links from site */
-    var rawFile = new XMLHttpRequest();
-    rawFile.open("GET", radioListFileURL, false);
-    rawFile.onload = function () {
-      if (
-        rawFile.readyState === 4 &&
-        (rawFile.status === 200 || rawFile.status == 0)
-      ) {
-        var links = rawFile.responseText.split("\n");
-        links.forEach((link) => {
-          if (link == "") return;
-          var split = link.split(" ");
-          var url = split[0];
-          split.shift(); // delete the url part
-          var name = split.join(" ");
-          // if the id is new to the cookie add it
-          if (_this.links.some((e) => e.url == url) == false) {
-            _this.links.push({ url: url, name: name });
-          }
-        });
-        _this.links.sort((e1, e2) => e1.name.localeCompare(e2.name));
-        _this.save();
-      }
-    };
-    rawFile.send(null);
+    /* Load the preset links from site if presetFetch is enabled */
+    if (globalSettings.presetFetch.get()) {
+      var rawFile = new XMLHttpRequest();
+      rawFile.open("GET", radioListFileURL, false);
+      rawFile.onload = function () {
+        if (
+          rawFile.readyState === 4 &&
+          (rawFile.status === 200 || rawFile.status == 0)
+        ) {
+          var links = rawFile.responseText.split("\n");
+          links.forEach((link) => {
+            if (link == "") return;
+            var split = link.split(" ");
+            var url = split[0];
+            split.shift(); // delete the url part
+            var name = split.join(" ");
+            // if the id is new to the cookie add it
+            if (_this.links.some((e) => e.url == url) == false) {
+              _this.links.push({ url: url, name: name });
+            }
+          });
+          _this.links.sort((e1, e2) => e1.name.localeCompare(e2.name));
+          _this.save();
+        }
+      };
+      rawFile.send(null);
+    }
 
     var cookieContentString = getCookie("radioListLastPlayed");
     if (cookieContentString != "") {

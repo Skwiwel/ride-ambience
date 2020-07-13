@@ -3,10 +3,7 @@ function EmittingVariable(val = undefined) {
   var listeners = [];
   this.set = function (val) {
     value = val;
-    for (const i in listeners) listeners[i]();
-  };
-  this.setSilent = function (val) {
-    value = val;
+    for (const i in listeners) listeners[i](value);
   };
   this.get = function () {
     return value;

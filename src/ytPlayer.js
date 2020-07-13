@@ -59,6 +59,18 @@ function onPlayerStateChange(event) {
   }
 }
 
+function saveVideoTime() {
+  // If the window is closed with only this much time left the video is considered finished
+  const timeToEndCutoff = 20;
+
+  var currTime = player.getCurrentTime();
+  if (player.getDuration() - currTime <= timeToEndCutoff) {
+    videoList.increaseVideoWeight(VIDEO_ID);
+  } else {
+    videoList.updateVideoTime(VIDEO_ID, currTime);
+  }
+}
+
 document.addEventListener("progressBarInput", function (e) {
   var newTime = player.getDuration() * (e.detail.value / e.detail.max);
   // Skip video to new time.
@@ -77,20 +89,14 @@ document.addEventListener("videoVolumeToggleMute", function (e) {
 document.addEventListener("videoVolumeSliderInput", function (e) {
   player.setVolume((e.detail.volume / e.detail.max) * 100);
 });
+document.addEventListener("playVideo", function (e) {
+  saveVideoTime();
+  VIDEO_ID = e.detail;
+  player.cueVideoById(VIDEO_ID, videoList.getVideoStart(VIDEO_ID));
+  player.playVideo();
+});
 
 /* Save video important values to cookie before leaving site */
 window.addEventListener("beforeunload", function () {
-  // If the window is closed with only this much time left the video is considered finished
-  const timeToEndCutoff = 20;
-  // If the window is closed with only this much time elapsed from the beggining the video is considered not started
-  const timeFromBeginningCutoff = 10;
-
-  var currTime = player.getCurrentTime();
-  if (player.getDuration() - currTime <= timeToEndCutoff) {
-    videoList.increaseVideoWeight(VIDEO_ID);
-  } else {
-    if (currTime > timeFromBeginningCutoff)
-      videoList.updateVideoTime(VIDEO_ID, currTime);
-    else videoList.updateVideoTime(VIDEO_ID, 0);
-  }
+  saveVideoTime();
 });

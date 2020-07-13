@@ -1,13 +1,19 @@
 :root {
+  --scrollbar-width: 10px;
   --button-vertical-size: 30px;
   --border-radius: calc(var(--button-vertical-size) / 2);
   --menu-margin: 10px;
+  --main-menu-margin-top: 60px;
   --menu-background-color: rgba(20, 20, 20, 0.3);
   --button-icon-size: calc(var(--button-vertical-size) * 2 / 3);
   --button-font-icon-top-margin: calc(var(--button-icon-size) * -1 / 2 - 1px);
   --button-font-icon-left-margin: calc(var(--button-icon-size) * -1 / 2 + 1px);
   --main-menu-width: 180px;
   --main-menu-height: auto;
+  --settings-menu-width: 500px;
+  --settings-menu-height: 300px;
+  --menu-hover-color: rgba(30, 30, 30, 1);
+  --submenu-hover-color: rgba(50, 50, 50, 1);
   --button-hover-color: rgba(90, 90, 90, 1);
   --button-click-color: rgba(70, 70, 70, 1);
   --video-time-width: 120px;
@@ -22,10 +28,41 @@ body {
   font-size: 0;
 }
 
+a:link,
+a:visited {
+  text-decoration: none;
+  color: inherit;
+}
+a:hover,
+a:active {
+  text-decoration: underline;
+  color: inherit;
+}
+
+::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+}
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--button-hover-color);
+}
+
 button {
   cursor: pointer;
   border: 0;
   outline: 0;
+  transition: 0.15s;
+}
+button:hover {
+  background-color: var(--button-hover-color);
+  /* Helps hide browser rendered border-radius related visual artifacts */
+  box-shadow: 0 0 1px 0 var(--button-hover-color);
+  transition: 0.05s;
+}
+button:active {
+  background-color: var(--button-click-color);
 }
 
 #player {
@@ -33,6 +70,7 @@ button {
   left: 0px;
   top: 0px;
   z-index: -1;
+  background-color: ;
 }
 
 .menu-container {
@@ -44,18 +82,18 @@ button {
   transition: 0.5s;
 }
 .menu-container:hover {
-  background-color: rgba(30, 30, 30, 1);
+  background-color: var(--menu-hover-color);
   transition: 0.5s;
 }
 .menu-container > .menu-container:hover {
-  background-color: rgba(50, 50, 50, 1);
+  background-color: var(--submenu-hover-color);
   transition: 0.5s;
 }
 
 .menu-container.main-menu {
   position: absolute;
   right: var(--menu-margin);
-  top: 60px;
+  top: var(--main-menu-margin-top);
   width: var(--main-menu-width);
   height: var(--main-menu-height);
 }
@@ -82,18 +120,6 @@ button {
 
 button.menu-item {
   height: var(--button-vertical-size);
-  transition: 0.15s;
-}
-
-button.menu-item:hover {
-  background-color: var(--button-hover-color);
-  /* Helps hide browser rendered border-radius related visual artifacts */
-  box-shadow: 0 0 1px 0 var(--button-hover-color);
-  transition: 0.05s;
-}
-
-button.menu-item:active {
-  background-color: var(--button-click-color);
 }
 
 button.checkbox {
@@ -120,7 +146,7 @@ button.checkbox[data-state="true"] {
   height: var(--button-vertical-size);
 }
 
-.radio-controls button {
+.radio-controls > button {
   display: inline-block;
   margin: 0;
   height: var(--button-vertical-size) !important;
@@ -180,6 +206,202 @@ button#radio-volume:hover + #radio-volume-slider-container,
 #radio-volume-slider {
   padding-right: var(--border-radius);
   width: calc((100% - 3 * var(--border-radius)));
+}
+
+#settings-container {
+  z-index: 1;
+  display: none;
+  position: absolute;
+  right: calc(var(--menu-margin) * 2 + var(--main-menu-width));
+  top: var(--main-menu-margin-top);
+  width: var(--settings-menu-width);
+  height: var(--settings-menu-height);
+  background-color: var(--menu-hover-color);
+  transition: unset;
+}
+#settings-container:hover {
+  background-color: var(--menu-hover-color);
+  transition: unset;
+}
+#settings-container[data-enabled="true"] {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.settings-menu > button.checkbox {
+  flex: 0 0 auto;
+  text-align: left;
+  padding-left: var(--button-vertical-size);
+}
+
+#settings-tab-selector-container {
+  flex: 0 0 auto;
+  margin-top: 5px;
+  height: 20px;
+  border-bottom: solid 1px var(--button-hover-color);
+}
+#settings-tab-selector-container > button {
+  height: 100%;
+  width: calc(3 * var(--button-vertical-size));
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  background-color: var(--submenu-hover-color);
+  color: white;
+  line-height: 20px;
+  text-align: center;
+}
+#settings-tab-selector-container > button:hover {
+  background-color: var(--button-hover-color);
+}
+#settings-tab-selector-container > button[data-state="true"] {
+  background-color: var(--button-hover-color);
+}
+
+#settings-tab-container {
+  flex: 1 1 auto;
+  height: 0;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  padding: 0;
+}
+#settings-tab-container > * {
+  height: 100%;
+  width: 100%;
+  display: none;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  font-size: 14px;
+  color: grey;
+}
+#settings-tab-container > *[data-enabled="true"] {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.list-header {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: row;
+  height: 20px;
+  width: 100%;
+  font-size: 12px;
+  color: grey;
+  line-height: 20px;
+  background-color: var(--submenu-hover-color);
+}
+.list-container {
+  flex: 1 1 auto;
+  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+#video-list-container {
+  border-bottom: solid 1px var(--button-hover-color);
+}
+
+.list-object {
+  display: flex;
+  flex-direction: row;
+  height: var(--button-vertical-size);
+  width: 100%;
+  /*background-color: var(--submenu-hover-color);*/
+  border-bottom: solid 1px var(--submenu-hover-color);
+  border-radius: 0;
+  transition: 0.15s;
+  font-size: 14px;
+  color: grey;
+  line-height: var(--button-vertical-size);
+  text-align: left;
+  padding: 0 5px 0 5px;
+}
+.list-object:last-of-type {
+  border-bottom: none;
+}
+.list-object:hover {
+  background-color: var(--submenu-hover-color);
+  /* Helps hide browser rendered border-radius related visual artifacts */
+  transition: 0.05s;
+}
+
+.list-object > * {
+  flex: 1 1 auto;
+  text-align: center;
+  width: 0px;
+}
+.list-object > * > button {
+  width: var(--button-vertical-size);
+  color: grey;
+}
+.list-object > * > button:hover {
+  color: white;
+}
+.list-object > * > button > span.jam {
+  position: inherit;
+  margin-top: initial;
+  margin-left: initial;
+}
+.video-list-title {
+  flex: 1 1 auto;
+  padding-left: 5px;
+  text-align: left;
+}
+.list-header > .video-list-title {
+  padding: auto;
+  text-align: center;
+}
+.video-list-ytID {
+  flex: 0 0 auto;
+  width: calc(11ch + 20px);
+  font-family: "Lucida Console", Monaco, monospace;
+}
+.video-list-start {
+  flex: 0 0 auto;
+  width: 40px;
+}
+.video-list-weight {
+  flex: 0 0 auto;
+  width: 50px;
+}
+.video-list-play {
+  flex: 0 0 auto;
+  width: var(--button-vertical-size);
+}
+.video-list-play > button > span.jam.jam-play {
+  --size: calc(var(--button-icon-size) - 2px);
+  font-size: var(--size);
+}
+.list-object-delete {
+  flex: 0 0 auto;
+  width: var(--button-vertical-size);
+  margin-right: calc(var(--scrollbar-width) + 5px);
+}
+.list-object-delete > button > span.jam.jam-close {
+  margin-left: -1px;
+}
+
+#video-list-add-container {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: row;
+  height: var(--button-vertical-size);
+  font-size: 14px;
+  line-height: var(--button-vertical-size);
+}
+#video-list-add-input {
+  flex: 1 1 auto;
+  width: 0px;
+  margin-left: var(--border-radius);
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+}
+#video-list-add-button {
+  flex: 0 0 auto;
+  width: var(--button-vertical-size);
+  color: grey;
+}
+#video-list-add-button:hover {
+  color: white;
 }
 
 .menu-container.video-controls {
@@ -281,11 +503,16 @@ button span.jam {
   display: inline-block;
   font-size: 20px;
   position: fixed;
-  /* the Jam svgs are around 24x24 px */
   margin-top: var(--button-font-icon-top-margin);
   margin-left: var(--button-font-icon-left-margin);
 }
 button span.jam.jam-pause {
+  margin-left: calc(var(--button-font-icon-left-margin) - 1px);
+}
+button span.jam.jam-close {
+  margin-left: calc(var(--button-font-icon-left-margin) - 1px);
+}
+button span.jam.jam-plus {
   margin-left: calc(var(--button-font-icon-left-margin) - 1px);
 }
 
