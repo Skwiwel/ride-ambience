@@ -21,7 +21,7 @@ I put a container online for a quick demo for anyone to checkout. The hosting is
 
 While you may be quite right saying that this is just a glorified YouTube playlist with some radio the site does feature some simple techniques designed to aid in the app's purpose. The video playlist, among other things, shuffles videos based on what was already seen, remembers where the user finished (closed the site) and allows for skipping video intros (based on specified time).
 
-On load the app tries to fetch the preset playlist (currently some Japan oriented videos and radio stations) and compares it to the user's database stored in cookies. Right now it always adds whatever is in the fetched playlist but that can be changed and expanded on in the future. During use the database is updated to include cross-session relevant information. No personal or tracking information is saved.
+On load, depending on fetch setting, the app tries to fetch the preset playlist (currently some Japan oriented videos and radio stations) and compares it to the user's database stored in cookies. During use the database is updated to include cross-session relevant information. No personal or tracking information is saved.
 
 
 The app includes a Dockerfile with which a container image with an Nginx server can be built. A [public build at Docker Hub](https://hub.docker.com/r/skwiwel/ride-ambience) is also hooked to the [app's GitHub repo](https://github.com/Skwiwel/ride-ambience) so that the newest version can be easily deployed. The provided Nginx server coniguration listens on port 8081.
