@@ -241,7 +241,7 @@ button#radio-volume:hover + #radio-volume-slider-container,
 #settings-tab-selector-container > button:hover {
   background-color: var(--button-hover-color);
 }
-#settings-tab-selector-container > button[data-state="enabled"] {
+#settings-tab-selector-container > button[data-state="true"] {
   background-color: var(--button-hover-color);
 }
 

@@ -14,31 +14,39 @@ var settingsWindow = new (function () {
    *  For each button inside the "settings-tab-selector-container" a
    *  corresponding tab div is searched for.
    */
+  currTab = new EmittingVariable("video-list");
+
   var tabSelectors = document.querySelectorAll(
     "#settings-tab-selector-container > button"
   );
-  var tabs = document.querySelectorAll("#settings-tab-container > div");
+  var tabContainers = document.querySelectorAll(
+    "#settings-tab-container > div"
+  );
+
   tabSelectors.forEach((tabSelector) => {
     // Get corresponding tab id
-    var selectorID = tabSelector.id;
-    var tabID = selectorID.split("-selector", 1) + "-container";
-    var targetTab = document.getElementById(tabID);
-    // onclick hide other tabs and
+    var tabID = tabSelector.id.split("-tab-selector", 1)[0];
+    console.log(tabID);
+    // onclick set tab
     tabSelector.onclick = function () {
-      tabSelectors.forEach((selector) => {
-        selector.dataset.state = "disabled";
-      });
-      tabSelector.dataset.state = "enabled";
-      tabs.forEach((tab) => {
-        tab.dataset.enabled = false;
-      });
-      targetTab.dataset.enabled = true;
+      currTab.set(tabID);
     };
+    currTab.addListener(function (val) {
+      tabSelector.dataset.state = val == tabID ? true : false;
+    });
+  });
+
+  tabContainers.forEach((tabContainer) => {
+    // Get corresponding tab id
+    var tabID = tabContainer.id.split("-tab-container", 1)[0];
+    console.log(tabID);
+    currTab.addListener(function (val) {
+      tabContainer.dataset.enabled = val == tabID ? true : false;
+    });
   });
 
   // init
   {
-    tabSelectors[0].dataset.state = "enabled";
-    tabs[0].dataset.enabled = true;
+    currTab.set("video-list");
   }
 })();
