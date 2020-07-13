@@ -1,5 +1,5 @@
 const radioListFileURL =
-  "https://raw.githubusercontent.com/Skwiwel/YT-Drive-Project/master/Radio_Links";
+  "https://raw.githubusercontent.com/Skwiwel/ride-ambience/master/Radio_Links";
 
 var radioList = new (function () {
   var _this = this;

@@ -105,35 +105,41 @@
       </div>
       <div id="settings-tab-container">
         <div id="video-list-tab-container">
-          <div class="list-container" id="video-list-container">
-            <div class="list-object">aaa</div>
-            <div class="list-object">bbb</div>
-            <div class="list-object">ccc</div>
-            <div class="list-object">aaa</div>
-            <div class="list-object">bbb</div>
-            <div class="list-object">ccc</div>
-            <div class="list-object">aaa</div>
-            <div class="list-object">bbb</div>
-            <div class="list-object">ccc</div>
-            <div class="list-object">aaa</div>
-            <div class="list-object">bbb</div>
-            <div class="list-object">ccc</div>
+          <div class="list-header">
+            <div class="video-list-title">Title</div>
+            <div class="video-list-ytID">YouTube ID</div>
+            <div class="video-list-start">Start</div>
+            <div class="video-list-weight">Weight</div>
+            <div class="video-list-play"></div>
+            <div class="list-object-delete"></div>
           </div>
-          <div id="video-list-add-container">add</div>
+          <div class="list-container" id="video-list-container"></div>
+          <div id="video-list-add-container">
+            <input
+              type="text"
+              placeholder="Enter a YouTube url here to add a video"
+              id="video-list-add-input"
+            />
+            <button class="menu-item" id="video-list-add-button">
+              <span class="jam jam-plus" />
+            </button>
+          </div>
         </div>
         <div id="radio-list-tab-container">
-          <div class="list-container" id="radio-list-container">
-            <div class="list-object">aaa</div>
-            <div class="list-object">ccc</div>
-          </div>
+          <code>//TODO</code>
+          <div class="list-container" id="radio-list-container"></div>
         </div>
-        <div id="other-tab-container"></div>
+        <div id="other-tab-container">
+          <code>//TODO</code>
+        </div>
       </div>
     </div>
 
     <script src="https://unpkg.com/jam-icons/js/jam.min.js"></script>
+    <script src="GetYouTubeID.js"></script>
     <script src="cookieOperations.js"></script>
     <script src="EmittingVariable.js"></script>
+    <script src="formatTime.js"></script>
     <script src="CheckboxButton.js"></script>
     <script src="globalSettings.js"></script>
     <script src="radioList.js"></script>

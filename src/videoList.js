@@ -18,19 +18,21 @@ var videoList = new (function () {
   this.save = function () {
     setCookie("VideoList", JSON.stringify(this.links));
   };
+
   this.increaseVideoWeight = function (videoId) {
-    if (videoId == "") return;
-    if (this.links[videoId] != undefined) {
-      this.links[videoId].start =
-        this.links[videoId].startDefault == undefined
-          ? defaultVideoStartTime
-          : this.links[videoId].startDefault;
-      this.links[videoId].weight += 1;
+    if (videoId == "" || this.links[videoId] === undefined) return;
+
+    if (this.links[videoId].startDefault === undefined) {
+      this.links[videoId].start = defaultVideoStartTime;
     } else {
-      this.links[videoId] = { start: defaultVideoStartTime, weight: 1 };
+      this.links[videoId].start = this.links[videoId].startDefault;
     }
+    this.links[videoId].weight += 1;
+    if (this.links[videoId].weight > 2) this.links[videoId].weight = 2;
+
     this.save();
   };
+
   this.updateVideoTime = function (videoId, time) {
     this.links[videoId].start = time;
     if (this.links[videoId].weight == undefined) {
@@ -38,6 +40,7 @@ var videoList = new (function () {
     }
     this.save();
   };
+
   this.getVideoStart = function (videoId) {
     if (this.links[videoId] == undefined) {
       return 0;
@@ -72,10 +75,12 @@ var videoList = new (function () {
   };
 
   this.add = function (id, startDefault = defaultVideoStartTime) {
+    id = String(id);
     if (id.length < 11) return "Error: Incorrect id format.";
     id = GetYouTubeID(id);
     if (_this.links[id] == undefined) {
       _this.links[id] = new VideoLink(startDefault);
+      this.save();
       return "Added!";
     } else {
       return "Error: This video is already on the list.";
@@ -88,6 +93,7 @@ var videoList = new (function () {
       return false;
     }
     delete _this.links[id];
+    this.save();
     return true;
   };
 
