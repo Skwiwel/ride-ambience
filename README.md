@@ -32,5 +32,6 @@ The app includes a Dockerfile with which a container image with an Nginx server 
 The app's basic functionality is finished, but there are still many features to be added and bugs to be fixed. Among the bigger planned features are these:
 
 - [x] YT video list management through UI
-- [ ] Radio Station list management through UI (by the use of the radio-browser API)
+- [x] Radio Station list management through UI
+- [ ] Simple searching and adding radio stations through the radio-browser API
 - [ ] Individual video and radio volume / start time customization

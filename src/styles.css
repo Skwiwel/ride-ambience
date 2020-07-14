@@ -39,6 +39,13 @@ a:active {
   color: inherit;
 }
 
+input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+}
+
 ::-webkit-scrollbar {
   width: var(--scrollbar-width);
 }
@@ -293,8 +300,6 @@ button#radio-volume:hover + #radio-volume-slider-container,
   overflow: auto;
   overflow-y: auto;
   overflow-x: hidden;
-}
-#video-list-container {
   border-bottom: solid 1px var(--button-hover-color);
 }
 
@@ -311,7 +316,7 @@ button#radio-volume:hover + #radio-volume-slider-container,
   color: grey;
   line-height: var(--button-vertical-size);
   text-align: left;
-  padding: 0 5px 0 5px;
+  padding: 0 0 0 10px;
 }
 .list-object:last-of-type {
   border-bottom: none;
@@ -341,7 +346,6 @@ button#radio-volume:hover + #radio-volume-slider-container,
 }
 .video-list-title {
   flex: 1 1 auto;
-  padding-left: 5px;
   text-align: left;
 }
 .list-header > .video-list-title {
@@ -361,11 +365,35 @@ button#radio-volume:hover + #radio-volume-slider-container,
   flex: 0 0 auto;
   width: 50px;
 }
-.video-list-play {
+
+.radio-list-name {
+  flex: 2 0 auto;
+  width: 50px;
+  text-align: left;
+  overflow: hidden;
+}
+.radio-list-name > input {
+  color: grey;
+}
+.radio-list-url {
+  flex: 3 1 auto;
+  width: 0;
+  padding-left: 5px;
+  text-align: left;
+  overflow: hidden;
+  font-size: 12px;
+}
+.list-header > .radio-list-name,
+.list-header > .radio-list-url {
+  padding: auto;
+  text-align: center;
+}
+
+.list-play {
   flex: 0 0 auto;
   width: var(--button-vertical-size);
 }
-.video-list-play > button > span.jam.jam-play {
+.list-play > button > span.jam.jam-play {
   --size: calc(var(--button-icon-size) - 2px);
   font-size: var(--size);
 }
@@ -378,7 +406,7 @@ button#radio-volume:hover + #radio-volume-slider-container,
   margin-left: -1px;
 }
 
-#video-list-add-container {
+.list-add-container {
   flex: 0 0 auto;
   display: flex;
   flex-direction: row;
@@ -386,21 +414,17 @@ button#radio-volume:hover + #radio-volume-slider-container,
   font-size: 14px;
   line-height: var(--button-vertical-size);
 }
-#video-list-add-input {
+.list-add-container > input {
   flex: 1 1 auto;
   width: 0px;
   margin-left: var(--border-radius);
-  background: transparent;
-  border: none;
-  outline: none;
-  color: white;
 }
-#video-list-add-button {
+.list-add-container > button {
   flex: 0 0 auto;
   width: var(--button-vertical-size);
   color: grey;
 }
-#video-list-add-button:hover {
+.list-add-container > button:hover {
   color: white;
 }
 

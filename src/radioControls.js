@@ -1,5 +1,6 @@
 var radioControls = new (function () {
-  this.playing = true;
+  var playing = new EmittingVariable(true);
+
   playButton = document.getElementById("radio-play");
   backwardButton = document.getElementById("radio-backward");
   forwardButton = document.getElementById("radio-forward");
@@ -7,33 +8,58 @@ var radioControls = new (function () {
   volumeSlider = document.getElementById("radio-volume-slider");
   nameLabel = document.getElementById("radio-name-label");
   audio = document.getElementById("radio-audio");
+
   _this = this;
-  updateAudioPlaying = function () {
-    if (_this.playing) {
-      playButton.lastChild.className = "jam jam-pause";
-      audio.play();
+
+  /* Listen to changes in radio list current audio */
+  radioList.currentAudio.addListener(function (radio) {
+    // check if empty - no stations on the list
+    if (radio.url === undefined) {
+      playing.set(false);
+      nameLabel.innerHTML = "";
     } else {
-      playButton.lastChild.className = "jam jam-play";
+      audio.src = radio.url;
+      nameLabel.innerHTML = radio.name;
+      playing.set(playing.get()); // trigger listeners for a potential change
+    }
+  });
+
+  /* Updates button appearance */
+  function updatePlayButton(playing) {
+    playButton.lastChild.className = playing ? "jam jam-pause" : "jam jam-play";
+  }
+  playing.addListener(updatePlayButton);
+
+  /* Updates audio file playing */
+  function updateAudioPlay(playing) {
+    if (playing) {
+      const playPromise = audio.play();
+      /* A harmless expception happens on rapid radio station change */
+      if (playPromise !== null) {
+        playPromise.catch(() => {
+          /* discard runtime error */
+        });
+      }
+    } else {
       audio.pause();
     }
-  };
+  }
+  playing.addListener(updateAudioPlay);
+
+  /* If loading of the audio stream fails */
+  audio.addEventListener("error", function () {
+    nameLabel.innerHTML += "<br>Error: cannot load the audio stream";
+    playing.set(false);
+  });
+
   this.togglePlay = function () {
-    _this.playing = !_this.playing;
-    updateAudioPlaying();
+    if (radioList.getURL() !== undefined) playing.set(!playing.get());
   };
   playButton.onclick = this.togglePlay;
-  backwardButton.onclick = function () {
-    radioList.prev();
-    audio.src = radioList.getURL();
-    nameLabel.innerHTML = radioList.getName();
-    updateAudioPlaying();
-  };
-  forwardButton.onclick = function () {
-    radioList.next();
-    audio.src = radioList.getURL();
-    nameLabel.innerHTML = radioList.getName();
-    updateAudioPlaying();
-  };
+
+  backwardButton.onclick = radioList.prev;
+  forwardButton.onclick = radioList.next;
+
   this.toggleMute = function () {
     audio.muted = !audio.muted;
     updateVolumeButton();
@@ -56,11 +82,13 @@ var radioControls = new (function () {
       volumeButton.lastChild.className = "jam jam-volume";
     }
   };
+
   // init
   {
-    var cookieContentString = "";
     audio.src = radioList.getURL();
     nameLabel.innerHTML = radioList.getName();
+
+    var cookieContentString = "";
 
     var cookieContentFloat = parseFloat(getCookie("radioVolume"));
     audio.volume = isNaN(cookieContentFloat) ? 0.3 : cookieContentFloat;
@@ -70,13 +98,12 @@ var radioControls = new (function () {
     updateVolumeButton();
 
     cookieContentString = getCookie("radioPlay");
-    _this.playing = cookieContentString == "false" ? false : true;
-    updateAudioPlaying();
+    playing.set(cookieContentString == "false" ? false : true);
 
     window.addEventListener("beforeunload", function () {
       setCookie("radioVolume", audio.volume);
       setCookie("radioMuted", audio.muted);
-      setCookie("radioPlay", _this.playing);
+      setCookie("radioPlay", playing.get());
     });
   }
 })();
