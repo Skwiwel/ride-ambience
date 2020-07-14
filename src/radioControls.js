@@ -46,6 +46,12 @@ var radioControls = new (function () {
   }
   playing.addListener(updateAudioPlay);
 
+  /* If loading of the audio stream fails */
+  audio.addEventListener("error", function () {
+    nameLabel.innerHTML += "<br>Error: cannot load the audio stream";
+    playing.set(false);
+  });
+
   this.togglePlay = function () {
     if (radioList.getURL() !== undefined) playing.set(!playing.get());
   };
