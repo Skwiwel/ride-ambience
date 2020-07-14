@@ -18,8 +18,10 @@ var radioControls = new (function () {
       playing.set(false);
       nameLabel.innerHTML = "";
     } else {
-      audio.src = radio.url;
       nameLabel.innerHTML = radio.name;
+      if (audio.src != radio.url) {
+        audio.src = radio.url;
+      }
       playing.set(playing.get()); // trigger listeners for a potential change
     }
   });
