@@ -12,7 +12,7 @@ It was developed for my own personal use and to refresh my JS and CSS knowledge.
 
 ## App Demo
 
-I put a container online for a quick demo for anyone to checkout. The hosting is free and is generally not intended to be heavily used. I cannot guarantee the site will always be up.
+I put a container online for a quick demo for anyone to check out. The hosting is free and is generally not intended to be heavily used. I cannot guarantee the site will always be up.
 
 **[Link to the site](http://ride-ambience-skwiwel.apps.us-east-1.starter.openshift-online.com/)**
 
