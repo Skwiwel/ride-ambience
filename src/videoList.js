@@ -105,6 +105,7 @@ var videoList = new (function () {
       _this.links = JSON.parse(cookieContentString);
     }
 
+    /* Load the preset links from site if presetFetch is enabled */
     if (globalSettings.presetFetch.get()) {
       var rawFile = new XMLHttpRequest();
       rawFile.open("GET", videoLinksFileURL, false);
