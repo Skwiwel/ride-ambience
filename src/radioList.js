@@ -1,5 +1,5 @@
 const radioListFileURL =
-  "https://raw.githubusercontent.com/Skwiwel/ride-ambience/feature-presets/radio_presets.json";
+  "https://raw.githubusercontent.com/Skwiwel/ride-ambience/master/radio_presets.json";
 
 var radioList = new (function () {
   var _this = this;
