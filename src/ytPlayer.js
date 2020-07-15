@@ -56,6 +56,14 @@ function onPlayerStateChange(event) {
     videoList.increaseVideoWeight(VIDEO_ID);
     VIDEO_ID = videoList.findNextVideo();
     player.loadVideoById({ videoId: VIDEO_ID });
+  } else if (event.data == YT.PlayerState.PLAYING) {
+    /*  Set video title
+     *  getVideoData() was previously removed and is currently not documented
+     *  for this reason better to check if it even exists */
+    if (player.getVideoData !== undefined) {
+      let data = player.getVideoData();
+      videoList.setTitle(data.video_id, data.title);
+    }
   }
 }
 

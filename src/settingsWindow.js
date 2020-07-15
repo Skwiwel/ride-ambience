@@ -64,9 +64,9 @@ var settingsWindow = new (function () {
       vid = videoList.links[`${video}`];
       tempString +=
         '<div class="list-object">' +
-        '<div class="video-list-title">' +
+        '<div class="video-list-title text-autoscroll"><span>' +
         (vid.title == undefined ? "" : vid.title) +
-        "</div>" +
+        "</span></div>" +
         '<div class="video-list-ytID"><a href="https://www.youtube.com/watch?v=' +
         video +
         '">' +
@@ -88,6 +88,7 @@ var settingsWindow = new (function () {
         "</div></div>";
     }
     videoListContainer.innerHTML = tempString;
+    applyTextAutoscroll(videoListContainer);
     videoAddInput.placeholder = "Enter a YouTube url here to add a video";
   };
   /* Video List tab helper functions */
@@ -104,7 +105,10 @@ var settingsWindow = new (function () {
     var result = videoList.add(id);
     videoAddInput.placeholder = result;
     videoAddInput.value = "";
-    if (result == "Added!") videoListTabContainer._ra_initFunction();
+    if (result == "Added!") {
+      videoListTabContainer._ra_initFunction();
+      videoAddInput.placeholder = result;
+    }
   }
   videoAddButton.onclick = videoAdd;
   videoAddInput.addEventListener("keydown", (e) => {
@@ -133,7 +137,7 @@ var settingsWindow = new (function () {
         '" oninput=\'settingsWindow.radioChangeName("' +
         radio.url +
         '", this.value);\' spellcheck="false"></div>' +
-        '<div class="radio-list-url"><a href="' +
+        '<div class="radio-list-url text-autoscroll"><a href="' +
         radio.url +
         '">' +
         urlShort +
@@ -150,6 +154,7 @@ var settingsWindow = new (function () {
         "</div></div>";
     });
     radioListContainer.innerHTML = tempString;
+    applyTextAutoscroll(radioListContainer);
     radioAddInput.placeholder =
       "Enter an audio stream url here to add a radio station";
   };
@@ -169,7 +174,10 @@ var settingsWindow = new (function () {
     var result = radioList.addByURL(url);
     radioAddInput.placeholder = result;
     radioAddInput.value = "";
-    if (result == "Added!") radioListTabContainer._ra_initFunction();
+    if (result == "Added!") {
+      radioListTabContainer._ra_initFunction();
+      radioAddInput.placeholder = result;
+    }
   }
   radioAddButton.onclick = radioAdd;
   radioAddInput.addEventListener("keydown", (e) => {

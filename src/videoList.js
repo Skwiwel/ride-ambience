@@ -84,7 +84,7 @@ var videoList = new (function () {
     if (id.length < 11) return "Error: Incorrect id format.";
     id = GetYouTubeID(id);
     if (_this.links[id] == undefined) {
-      _this.links[id] = new VideoLink(startDefault);
+      _this.links[id] = new VideoLink();
       this.save();
       return "Added!";
     } else {
@@ -100,6 +100,11 @@ var videoList = new (function () {
     delete _this.links[id];
     this.save();
     return true;
+  };
+
+  this.setTitle = function (id, title) {
+    if (title != "") _this.links[id].title = title;
+    this.save();
   };
 
   // init

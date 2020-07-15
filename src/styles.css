@@ -347,6 +347,7 @@ button#radio-volume:hover + #radio-volume-slider-container,
 .video-list-title {
   flex: 1 1 auto;
   text-align: left;
+  font-size: 12px;
 }
 .list-header > .video-list-title {
   padding: auto;
@@ -387,6 +388,16 @@ button#radio-volume:hover + #radio-volume-slider-container,
 .list-header > .radio-list-url {
   padding: auto;
   text-align: center;
+}
+
+.text-autoscroll {
+  overflow: hidden;
+}
+.text-autoscroll > span,
+.text-autoscroll > a {
+  display: inline-block;
+  white-space: nowrap;
+  transition-timing-function: linear;
 }
 
 .list-play {
