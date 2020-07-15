@@ -1,5 +1,5 @@
 const radioListFileURL =
-  "https://raw.githubusercontent.com/Skwiwel/ride-ambience/master/Radio_Links";
+  "https://raw.githubusercontent.com/Skwiwel/ride-ambience/feature-presets/radio_presets.json";
 
 var radioList = new (function () {
   var _this = this;
@@ -94,7 +94,10 @@ var radioList = new (function () {
       _this.links = JSON.parse(cookieContentString);
     }
     /* Load the preset links from site if presetFetch is enabled */
-    if (globalSettings.presetFetch.get()) {
+    if (
+      globalSettings.preset.get().localeCompare("Custom") != 0 &&
+      globalSettings.presetFetch.get()
+    ) {
       var rawFile = new XMLHttpRequest();
       rawFile.open("GET", radioListFileURL, false);
       rawFile.onload = function () {
@@ -102,20 +105,21 @@ var radioList = new (function () {
           rawFile.readyState === 4 &&
           (rawFile.status === 200 || rawFile.status == 0)
         ) {
-          var links = rawFile.responseText.split("\n");
+          var rawText = rawFile.responseText;
+          presets = JSON.parse(rawText);
+          var links = presets[globalSettings.preset.get()].list;
           links.forEach((link) => {
-            if (link == "") return;
-            var split = link.split(" ");
-            var url = split[0];
-            split.shift(); // delete the url part
-            var name = split.join(" ");
+            if (link.url === undefined || link.url == "") return;
             // if the id is new to the cookie add it
-            if (_this.links.some((e) => e.url == url) == false) {
-              _this.links.push(new RadioLink(url, name));
+            if (_this.links.some((e) => e.url == link.url) == false) {
+              _this.links.push(link);
             }
           });
           _this.links.sort((e1, e2) => e1.name.localeCompare(e2.name));
           _this.save();
+          // Set default radio
+          let defaultURL = presets[globalSettings.preset.get()].default;
+          currentID = _this.links.findIndex((e) => e.url == defaultURL);
         }
       };
       rawFile.send(null);
@@ -123,7 +127,8 @@ var radioList = new (function () {
 
     var cookieContentString = getCookie("radioListLastPlayed");
     if (cookieContentString != "") {
-      currentID = _this.links.findIndex((e) => e.url == cookieContentString);
+      let savedID = _this.links.findIndex((e) => e.url == cookieContentString);
+      currentID = savedID != -1 ? savedID : currentID;
     }
     /* set initial value of 0 if there is an incorrect one in the cookie */
     if (currentID == -1) currentID = 0;
