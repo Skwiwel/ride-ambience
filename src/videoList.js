@@ -1,5 +1,5 @@
 const videoLinksFileURL =
-  "https://raw.githubusercontent.com/Skwiwel/ride-ambience/master/YouTube_Links";
+  "https://raw.githubusercontent.com/Skwiwel/ride-ambience/feature-presets/video_presets.json";
 
 var videoList = new (function () {
   this.links = {};
