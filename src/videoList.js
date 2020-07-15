@@ -1,18 +1,23 @@
 const videoLinksFileURL =
-  "https://raw.githubusercontent.com/Skwiwel/ride-ambience/master/YouTube_Links";
+  "https://raw.githubusercontent.com/Skwiwel/ride-ambience/feature-presets/video_presets.json";
 
 var videoList = new (function () {
   this.links = {};
   const defaultVideoStartTime = 30;
+  var presets = {};
 
   function VideoLink(
+    title = "",
     startDefault = defaultVideoStartTime,
     start = defaultVideoStartTime,
-    weight = 0
+    weight = 0,
+    volumeMult = 1.0
   ) {
+    this.title = title;
     this.startDefault = startDefault;
     this.start = start;
     this.weight = weight;
+    this.volumeMult = volumeMult;
   }
 
   this.save = function () {
@@ -79,7 +84,7 @@ var videoList = new (function () {
     if (id.length < 11) return "Error: Incorrect id format.";
     id = GetYouTubeID(id);
     if (_this.links[id] == undefined) {
-      _this.links[id] = new VideoLink(startDefault);
+      _this.links[id] = new VideoLink();
       this.save();
       return "Added!";
     } else {
@@ -97,6 +102,11 @@ var videoList = new (function () {
     return true;
   };
 
+  this.setTitle = function (id, title) {
+    if (title != "") _this.links[id].title = title;
+    this.save();
+  };
+
   // init
   {
     var cookieContentString = getCookie("VideoList");
@@ -106,7 +116,10 @@ var videoList = new (function () {
     }
 
     /* Load the preset links from site if presetFetch is enabled */
-    if (globalSettings.presetFetch.get()) {
+    if (
+      globalSettings.preset.get().localeCompare("Custom") != 0 &&
+      globalSettings.presetFetch.get()
+    ) {
       var rawFile = new XMLHttpRequest();
       rawFile.open("GET", videoLinksFileURL, false);
       rawFile.onload = function () {
@@ -114,16 +127,13 @@ var videoList = new (function () {
           rawFile.readyState === 4 &&
           (rawFile.status === 200 || rawFile.status == 0)
         ) {
-          var links = rawFile.responseText.split("\n");
-          links.forEach((link) => {
-            if (link == "") return;
-            // get the id from yt URL
-            videoId = GetYouTubeID(link);
-            // if the id is new to the cookie add it
-            if (_this.links[videoId] == undefined) {
-              _this.links[videoId] = new VideoLink();
-            }
-          });
+          var rawText = rawFile.responseText;
+          presets = JSON.parse(rawText);
+          var links = presets[globalSettings.preset.get()];
+          for (const video in links) {
+            if (_this.links[`${video}`] === undefined)
+              _this.links[`${video}`] = links[`${video}`];
+          }
           setCookie("VideoList", JSON.stringify(_this.links));
         }
       };
@@ -132,6 +142,9 @@ var videoList = new (function () {
 
     // error checking
     for (const video in _this.links) {
+      if (_this.links[`${video}`].title === undefined) {
+        _this.links[`${video}`].title = "";
+      }
       if (_this.links[`${video}`].weight === undefined) {
         _this.links[`${video}`].weight = 0;
       }
@@ -140,6 +153,9 @@ var videoList = new (function () {
       }
       if (_this.links[`${video}`].start === undefined) {
         _this.links[`${video}`].start = _this.links[`${video}`].startDefault;
+      }
+      if (_this.links[`${video}`].volumeMult === undefined) {
+        _this.links[`${video}`].volumeMult = 1.0;
       }
     }
   }

@@ -3,6 +3,7 @@ var globalSettings = new (function () {
   this.presetFetch = new EmittingVariable(true);
   this.videoControls = new EmittingVariable(false);
   this.fullscreen = new EmittingVariable(false);
+  this.preset = new EmittingVariable("Japan");
   var _this = this;
 
   this.presetFetch.addListener(function (val) {
