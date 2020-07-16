@@ -12,8 +12,7 @@ var settingsWindow = new (function () {
 
   /*  Applies logic to the tabs.
    *  For each button inside the "settings-tab-selector-container" a
-   *  corresponding tab div is searched for.
-   */
+   *  corresponding tab div is searched for. */
   currTab = new EmittingVariable("video-list");
 
   var tabSelectors = document.querySelectorAll(
@@ -60,8 +59,8 @@ var settingsWindow = new (function () {
   // display video list
   videoListTabContainer._ra_initFunction = function () {
     var tempString = "";
-    for (const video in videoList.links) {
-      vid = videoList.links[`${video}`];
+    for (const video in videoModule.list) {
+      vid = videoModule.list[`${video}`];
       tempString +=
         '<div class="list-object">' +
         '<div class="video-list-title text-autoscroll"><span>' +
@@ -93,16 +92,17 @@ var settingsWindow = new (function () {
   };
   /* Video List tab helper functions */
   this.videoDelete = function (id) {
-    if (videoList.delete(id)) videoListTabContainer._ra_initFunction();
+    if (videoModule.delete(id)) videoListTabContainer._ra_initFunction();
   };
   this.videoPlay = function (id) {
-    document.dispatchEvent(new CustomEvent("playVideo", { detail: id }));
+    videoModule.currentVideo.set(videoModule.list[id]);
+    videoModule.playing.set(true);
   };
   function videoAdd() {
     var url = videoAddInput.value;
     if (url == "") return;
     id = GetYouTubeID(url);
-    var result = videoList.add(id);
+    var result = videoModule.add(id);
     videoAddInput.placeholder = result;
     videoAddInput.value = "";
     if (result == "Added!") {

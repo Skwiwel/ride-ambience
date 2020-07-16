@@ -12,29 +12,40 @@ var videoControls = new (function () {
 
   const _this = this;
 
-  this.togglePlay = function () {
-    play = !play;
-    updateButtonAppearance();
-    /* Dispatch event for a video player */
-    document.dispatchEvent(
-      new CustomEvent("playPause", { detail: play ? "play" : "pause" })
-    );
-  };
-  playButton.onclick = this.togglePlay;
-  this.updateTime = function (timeCurr, timeOverall) {
-    currentTimeText.innerHTML = formatTime(timeCurr);
-    overallTimeText.innerHTML = formatTime(timeOverall);
-  };
-  this.updateProgressBar = function (timeCurr, timeOverall) {
-    progressBar.value = (timeCurr / timeOverall) * progressBar.max;
-  };
-  updateButtonAppearance = function () {
-    /* Change play button appearance */
-    if (play) {
-      playButton.lastChild.className = "jam jam-pause";
-    } else {
-      playButton.lastChild.className = "jam jam-play";
-    }
+  function togglePlay() {
+    videoModule.playing.set(!videoModule.playing.get());
+  }
+  playButton.onclick = togglePlay;
+
+  function updateTime(time = videoModule.time.get()) {
+    currentTimeText.innerHTML = formatTime(time.current);
+    overallTimeText.innerHTML = formatTime(time.end);
+  }
+  videoModule.time.addListener(updateTime);
+
+  /* Listen to clicks on the progress bar
+   * to ignore time updates from the video player */
+  var progressBarClicked = false;
+  progressBar.addEventListener("mousedown", () => {
+    progressBarClicked = true;
+  });
+  progressBar.addEventListener("mouseup", () => {
+    progressBarClicked = false;
+  });
+  function updateProgressBar(time = videoModule.time.get()) {
+    if (progressBarClicked) return;
+    progressBar.value = (time.current / time.end) * progressBar.max;
+  }
+  videoModule.time.addListener(updateProgressBar);
+
+  function updatePlayButon(playing = videoModule.playing.get()) {
+    playButton.lastChild.className = playing ? "jam jam-pause" : "jam jam-play";
+  }
+  videoModule.playing.addListener(updatePlayButon);
+
+  function updateVolumeButon() {
+    let muted = videoModule.muted.get();
+    let volume = videoModule.volume.get();
     if (muted) {
       volumeButton.lastChild.className = "jam jam-volume-mute";
     } else if (volume > 0.5) {
@@ -44,66 +55,41 @@ var videoControls = new (function () {
     } else {
       volumeButton.lastChild.className = "jam jam-volume";
     }
-  };
-  updateVisibility = function () {
-    containerDiv.dataset.enabled = globalSettings.videoControls.get();
-  };
+  }
+  videoModule.muted.addListener(updateVolumeButon);
+  videoModule.volume.addListener(updateVolumeButon);
+
+  function updateVolumeSlider(volume = videoModule.volume.get()) {
+    volumeSlider.value = volume * volumeSlider.max;
+  }
+
+  function updateVisibility(visible = globalSettings.videoControls.get()) {
+    containerDiv.dataset.enabled = visible;
+  }
   globalSettings.videoControls.addListener(updateVisibility);
+
   progressBar.oninput = function () {
-    document.dispatchEvent(
-      new CustomEvent("progressBarInput", {
-        detail: { value: progressBar.value, max: progressBar.max },
-      })
-    );
+    time = videoModule.time.get();
+    time.current = time.end * (progressBar.value / progressBar.max);
+    videoModule.time.set(time);
   };
-  this.getMute = function () {
-    return muted;
-  };
-  this.setMute = function (mute) {
-    muted = mute;
-    document.dispatchEvent(
-      new CustomEvent("videoVolumeToggleMute", {
-        detail: muted ? "mute" : "unmute",
-      })
-    );
-    updateButtonAppearance();
-  };
-  this.toggleMute = function () {
-    _this.setMute(!muted);
-  };
-  volumeButton.onclick = this.toggleMute;
-  this.getVolume = function () {
-    return volume;
-  };
-  this.setVolume = function (vol, max) {
-    volume = vol;
-    document.dispatchEvent(
-      new CustomEvent("videoVolumeSliderInput", {
-        detail: { volume: vol, max: max },
-      })
-    );
-    updateButtonAppearance();
-  };
+
+  function toggleMute() {
+    videoModule.muted.set(!videoModule.muted.get());
+  }
+  volumeButton.onclick = toggleMute;
+
   volumeSlider.oninput = function () {
-    _this.setVolume(volumeSlider.value, volumeSlider.max);
+    videoModule.volume.set(volumeSlider.value / volumeSlider.max);
   };
+
   // init
   {
     updateVisibility();
-
-    var cookieContentFloat = parseFloat(getCookie("videoVolume"));
-    _this.setVolume(
-      isNaN(cookieContentFloat) ? 0.75 : cookieContentFloat,
-      volumeSlider.max
-    );
-    volumeSlider.value = volume;
-    cookieContentString = getCookie("videoMuted");
-    _this.setMute(cookieContentString == "true" ? true : false);
-    updateButtonAppearance();
-
-    window.addEventListener("beforeunload", function () {
-      setCookie("videoVolume", volume);
-      setCookie("videoMuted", muted);
-    });
+    updateTime();
+    updateProgressBar();
+    updatePlayButon();
+    updateVolumeButon();
+    updateVolumeSlider();
   }
 })();

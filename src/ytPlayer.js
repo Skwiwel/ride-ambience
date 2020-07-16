@@ -1,4 +1,4 @@
-var VIDEO_ID = "";
+var updateTimeIntervalID;
 
 // This code loads the IFrame Player API code asynchronously.
 var tag = document.createElement("script");
@@ -14,7 +14,7 @@ function onYouTubeIframeAPIReady() {
   player = new YT.Player("player", {
     height: "100%",
     width: "100%",
-    videoId: VIDEO_ID,
+    videoId: videoModule.currentVideo.get().id,
     playerVars: {
       fs: 0,
       autoplay: 1,
@@ -22,7 +22,7 @@ function onYouTubeIframeAPIReady() {
       enablejsapi: 1,
       iv_load_policy: 3,
       modestbranding: 1,
-      start: 0,
+      start: videoModule.currentVideo.get().start,
     },
     events: {
       onReady: onPlayerReady,
@@ -32,79 +32,78 @@ function onYouTubeIframeAPIReady() {
 }
 // The API will call this function when the video player is ready.
 function onPlayerReady(event) {
-  VIDEO_ID = videoList.findNextVideo();
-  // Set volume
-  videoControls.getMute() ? player.mute() : player.unMute();
-  player.setVolume(videoControls.getVolume() * 100);
-  // Load and play
-  player.cueVideoById(VIDEO_ID, videoList.getVideoStart(VIDEO_ID));
   player.playVideo();
-  // Initial update of display
-  videoControls.updateTime(player.getCurrentTime(), player.getDuration());
-  updateDisplayInterval = setInterval(function () {
-    videoControls.updateTime(player.getCurrentTime(), player.getDuration());
-    videoControls.updateProgressBar(
-      player.getCurrentTime(),
-      player.getDuration()
-    );
-  }, 1000);
+  player.seekTo(videoModule.currentVideo.get().start);
+  // Listen to video changes, but only after being ready (onPlayerReady)
+  videoModule.currentVideo.addListener(function (video) {
+    // Don't change video if it's the same as currently playing
+    if (video.id == GetYouTubeID(player.getVideoUrl())) return;
+    player.cueVideoById(video.id, video.start);
+    if (videoModule.playing.get()) player.playVideo();
+  });
 }
+
+function updateTime() {
+  videoModule.time.set({
+    current: player.getCurrentTime(),
+    end: player.getDuration(),
+  });
+}
+
+videoModule.playing.addListener(function (playing) {
+  if (playing) player.playVideo();
+  else player.pauseVideo();
+});
+
+videoModule.volume.addListener(function (volume) {
+  if (volume == player.getVolume() * 100) return;
+  player.setVolume(volume * 100);
+});
+
+videoModule.muted.addListener(function (muted) {
+  if (muted == player.isMuted()) return;
+  if (muted) player.mute();
+  else player.unMute();
+});
+
+videoModule.time.addListener(function (time) {
+  let playerTime = player.getCurrentTime();
+  let difference = Math.abs(playerTime - time.current);
+  // if the time difference is smaller than 2 seconds, ignore
+  if (difference < 2) return;
+  player.seekTo(time.current);
+});
 
 // The API calls this function when the player's state changes.
 function onPlayerStateChange(event) {
-  if (event.data == YT.PlayerState.ENDED) {
-    videoList.increaseVideoWeight(VIDEO_ID);
-    VIDEO_ID = videoList.findNextVideo();
-    player.loadVideoById({ videoId: VIDEO_ID });
-  } else if (event.data == YT.PlayerState.PLAYING) {
-    /*  Set video title
-     *  getVideoData() was previously removed and is currently not documented
-     *  for this reason better to check if it even exists */
-    if (player.getVideoData !== undefined) {
-      let data = player.getVideoData();
-      videoList.setTitle(data.video_id, data.title);
-    }
+  switch (event.data) {
+    case YT.PlayerState.UNSTARTED:
+      clearInterval(updateTimeIntervalID);
+      break;
+    case YT.PlayerState.ENDED:
+      videoModule.increaseVideoWeight(videoModule.currentVideo.get().id);
+      videoModule.findNextVideo();
+      clearInterval(updateTimeIntervalID);
+      break;
+    case YT.PlayerState.PLAYING:
+      updateTime();
+      // Update time every second
+      updateTimeIntervalID = setInterval(updateTime, 1000);
+      /*  Set video title
+       *  getVideoData() was previously removed and is currently not documented
+       *  for this reason better to check if it even exists */
+      if (player.getVideoData !== undefined) {
+        let data = player.getVideoData();
+        videoModule.setTitle(data.video_id, data.title);
+      }
+      break;
+    case YT.PlayerState.PAUSED:
+      clearInterval(updateTimeIntervalID);
+      break;
+    case YT.PlayerState.BUFFERING:
+      clearInterval(updateTimeIntervalID);
+      break;
+    default:
+      clearInterval(updateTimeIntervalID);
   }
 }
-
-function saveVideoTime() {
-  // If the window is closed with only this much time left the video is considered finished
-  const timeToEndCutoff = 20;
-
-  var currTime = player.getCurrentTime();
-  if (player.getDuration() - currTime <= timeToEndCutoff) {
-    videoList.increaseVideoWeight(VIDEO_ID);
-  } else {
-    videoList.updateVideoTime(VIDEO_ID, currTime);
-  }
-}
-
-document.addEventListener("progressBarInput", function (e) {
-  var newTime = player.getDuration() * (e.detail.value / e.detail.max);
-  // Skip video to new time.
-  player.seekTo(newTime);
-  // Update Video Controls time display
-  videoControls.updateTime(player.getCurrentTime(), player.getDuration());
-});
-
-document.addEventListener("playPause", function (e) {
-  e.detail == "pause" ? player.pauseVideo() : player.playVideo();
-});
-
-document.addEventListener("videoVolumeToggleMute", function (e) {
-  e.detail == "mute" ? player.mute() : player.unMute();
-});
-document.addEventListener("videoVolumeSliderInput", function (e) {
-  player.setVolume((e.detail.volume / e.detail.max) * 100);
-});
-document.addEventListener("playVideo", function (e) {
-  saveVideoTime();
-  VIDEO_ID = e.detail;
-  player.cueVideoById(VIDEO_ID, videoList.getVideoStart(VIDEO_ID));
-  player.playVideo();
-});
-
-/* Save video important values to cookie before leaving site */
-window.addEventListener("beforeunload", function () {
-  saveVideoTime();
-});
