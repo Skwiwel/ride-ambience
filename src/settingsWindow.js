@@ -127,7 +127,7 @@ var settingsWindow = new (function () {
   // display radio list
   radioListTabContainer._ra_initFunction = function () {
     var tempString = "";
-    radioList.links.forEach((radio) => {
+    radioModule.list.forEach((radio) => {
       var split = radio.url.split("//");
       var urlShort = split[split.length - 1];
       tempString +=
@@ -160,18 +160,18 @@ var settingsWindow = new (function () {
   };
   /* Radio List tab helper functions */
   this.radioDelete = function (url) {
-    if (radioList.deleteByURL(url)) radioListTabContainer._ra_initFunction();
+    if (radioModule.deleteByURL(url)) radioListTabContainer._ra_initFunction();
   };
   this.radioPlay = function (url) {
-    radioList.playByURL(url);
+    radioModule.playByURL(url);
   };
   this.radioChangeName = function (url, name) {
-    radioList.changeNameByURL(url, name);
+    radioModule.changeNameByURL(url, name);
   };
   function radioAdd() {
     var url = radioAddInput.value;
     if (url == "") return;
-    var result = radioList.addByURL(url);
+    var result = radioModule.addByURL(url);
     radioAddInput.placeholder = result;
     radioAddInput.value = "";
     if (result == "Added!") {
