@@ -47,7 +47,12 @@ var videoModule = new (function () {
   window.addEventListener("beforeunload", function () {
     const timeToEndCutoff = 60;
     let time = _this.time.get();
-    if (time?.current === undefined || time.end === undefined) return;
+    if (
+      time === undefined ||
+      time.current === undefined ||
+      time.end === undefined
+    )
+      return;
     if (time.end - time.current < timeToEndCutoff) {
       _this.increaseVideoWeight(_this.currentVideo.get().id);
       _this.save();
