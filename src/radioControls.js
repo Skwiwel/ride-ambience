@@ -18,7 +18,7 @@ var radioControls = new (function () {
 
   /* If loading of the audio stream fails */
   radioModule.audio.addEventListener("error", function () {
-    nameLabel.innerHTML += "<br>Error: cannot load the audio stream";
+    nameLabel.innerHTML += "<br>Error: could not load the audio stream";
   });
 
   this.togglePlay = function () {
