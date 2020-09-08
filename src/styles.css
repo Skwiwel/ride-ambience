@@ -87,6 +87,7 @@ button:active {
   border-radius: var(--border-radius);
   z-index: 0;
   transition: 0.5s;
+  cursor: default;
 }
 .menu-container:hover {
   background-color: var(--menu-hover-color);
