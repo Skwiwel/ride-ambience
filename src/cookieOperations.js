@@ -6,7 +6,7 @@ function setCookie(cname, cvalue) {
   // expires in 5 years
   d.setTime(d.getTime() + expirationDays * 24 * 60 * 60 * 1000);
   var expires = "expires=" + d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+  document.cookie = `${cname}=${cvalue};${expires};path=/;SameSite=Strict`;
 }
 
 function getCookie(cname) {
