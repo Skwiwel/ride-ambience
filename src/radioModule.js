@@ -1,3 +1,7 @@
+import {EmittingVariable} from './EmittingVariable.js';
+import {setCookie, getCookie} from './cookieOperations.js';
+import {globalSettings} from './globalSettings.js';
+
 const radioListFileURL =
   "https://raw.githubusercontent.com/Skwiwel/ride-ambience/master/radio_presets.json";
 
@@ -7,7 +11,7 @@ const radioListFileURL =
  *  - currently playing audio stream
  *  - fetching the preset radio stations
  */
-var radioModule = new (function () {
+export var radioModule = new (function () {
   var _this = this;
 
   function RadioLink(url, name = "") {
@@ -172,7 +176,7 @@ var radioModule = new (function () {
           (rawFile.status === 200 || rawFile.status == 0)
         ) {
           var rawText = rawFile.responseText;
-          presets = JSON.parse(rawText);
+          var presets = JSON.parse(rawText);
           var list = presets[globalSettings.preset.get()].list;
           list.forEach((link) => {
             if (link.url === undefined || link.url == "") return;

@@ -1,13 +1,15 @@
+import {radioModule} from './radioModule.js';
+
 /* Manages the main menu radio UI */
 var radioControls = new (function () {
-  playButton = document.getElementById("radio-play");
-  backwardButton = document.getElementById("radio-backward");
-  forwardButton = document.getElementById("radio-forward");
-  volumeButton = document.getElementById("radio-volume");
-  volumeSlider = document.getElementById("radio-volume-slider");
-  nameLabel = document.getElementById("radio-name-label");
+  var playButton = document.getElementById("radio-play");
+  var backwardButton = document.getElementById("radio-backward");
+  var forwardButton = document.getElementById("radio-forward");
+  var volumeButton = document.getElementById("radio-volume");
+  var volumeSlider = document.getElementById("radio-volume-slider");
+  var nameLabel = document.getElementById("radio-name-label");
 
-  _this = this;
+  let _this = this;
 
   /* Listen to changes in current audio */
   radioModule.currentAudio.addListener(function (radio) {
@@ -50,7 +52,7 @@ var radioControls = new (function () {
   radioModule.playing.addListener(updatePlayButton);
 
   /* Updates volume button appearance */
-  updateVolumeButton = function () {
+  var updateVolumeButton = function () {
     if (radioModule.muted.get()) {
       volumeButton.lastChild.className = "jam jam-volume-mute";
     } else if (radioModule.volume.get() > 0.5) {
@@ -65,7 +67,7 @@ var radioControls = new (function () {
   radioModule.muted.addListener(updateVolumeButton);
 
   /* Updates volume slider value */
-  updateVolumeSlider = function (volume = radioModule.volume.get()) {
+  var updateVolumeSlider = function (volume = radioModule.volume.get()) {
     volumeSlider.value = volume;
   };
   radioModule.volume.addListener(updateVolumeSlider);

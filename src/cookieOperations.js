@@ -1,7 +1,7 @@
 // In how many days will the cookie expire after update
 var expirationDays = 5 * 365;
 
-function setCookie(cname, cvalue) {
+export function setCookie(cname, cvalue) {
   var d = new Date();
   // expires in 5 years
   d.setTime(d.getTime() + expirationDays * 24 * 60 * 60 * 1000);
@@ -9,7 +9,7 @@ function setCookie(cname, cvalue) {
   document.cookie = `${cname}=${cvalue};${expires};path=/;SameSite=Strict`;
 }
 
-function getCookie(cname) {
+export function getCookie(cname) {
   var name = cname + "=";
   var decodedCookie = decodeURIComponent(document.cookie);
   var ca = decodedCookie.split(";");

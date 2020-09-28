@@ -1,4 +1,4 @@
-function applyTextAutoscroll(elem) {
+export function applyTextAutoscroll(elem) {
   const tansitionTimePerPixel = 0.01;
   const textBoxes = elem.querySelectorAll(".text-autoscroll");
   textBoxes.forEach((textBox) => {

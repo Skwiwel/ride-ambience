@@ -1,7 +1,12 @@
+import {EmittingVariable} from './EmittingVariable.js';
+import {setCookie, getCookie} from './cookieOperations.js';
+import {globalSettings} from './globalSettings.js';
+import {GetYouTubeID} from './GetYouTubeID.js';
+
 const videoListFileURL =
   "https://raw.githubusercontent.com/Skwiwel/ride-ambience/master/video_presets.json";
 
-var videoModule = new (function () {
+export var videoModule = new (function () {
   var _this = this;
   function VideoLink(
     id,

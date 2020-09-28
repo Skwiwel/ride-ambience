@@ -1,4 +1,7 @@
-var globalSettings = new (function () {
+import {EmittingVariable} from './EmittingVariable.js';
+import {setCookie, getCookie} from './cookieOperations.js';
+
+export var globalSettings = new (function () {
   this.settingsOpen = new EmittingVariable(false);
   this.presetFetch = new EmittingVariable(true);
   this.videoControls = new EmittingVariable(false);

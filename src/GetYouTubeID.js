@@ -1,4 +1,4 @@
-function GetYouTubeID(url) {
+export function GetYouTubeID(url) {
   var id = "";
   url = url
     .replace(/(>|<)/gi, "")

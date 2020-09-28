@@ -1,3 +1,5 @@
+import {EmittingVariable} from './EmittingVariable.js';
+
 var UserActivityManager = new (function () {
   const _this = this;
 

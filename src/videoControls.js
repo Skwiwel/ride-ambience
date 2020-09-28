@@ -1,3 +1,7 @@
+import {videoModule} from './videoModule.js';
+import {globalSettings} from './globalSettings.js';
+import {formatTime} from './formatTime.js';
+
 var videoControls = new (function () {
   var play = true;
   var muted = false;
@@ -69,7 +73,7 @@ var videoControls = new (function () {
   globalSettings.videoControls.addListener(updateVisibility);
 
   progressBar.oninput = function () {
-    time = videoModule.time.get();
+    var time = videoModule.time.get();
     time.current = time.end * (progressBar.value / progressBar.max);
     videoModule.time.set(time);
   };
