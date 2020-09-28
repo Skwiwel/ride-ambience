@@ -4,7 +4,7 @@ import {globalSettings} from './globalSettings.js';
 import {GetYouTubeID} from './GetYouTubeID.js';
 
 const videoListFileURL =
-  "https://raw.githubusercontent.com/Skwiwel/ride-ambience/master/video_presets.json";
+  "https://raw.githubusercontent.com/Skwiwel/ride-ambience/master/public/video_presets.json";
 
 export var videoModule = new (function () {
   var _this = this;

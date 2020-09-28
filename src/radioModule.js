@@ -3,7 +3,7 @@ import {setCookie, getCookie} from './cookieOperations.js';
 import {globalSettings} from './globalSettings.js';
 
 const radioListFileURL =
-  "https://raw.githubusercontent.com/Skwiwel/ride-ambience/master/radio_presets.json";
+  "https://raw.githubusercontent.com/Skwiwel/ride-ambience/master/public/radio_presets.json";
 
 /*  The radioModule manages the:
  *  - audio stream url list
