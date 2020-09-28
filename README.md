@@ -14,7 +14,7 @@ It was developed for my own personal use and to refresh my JS and CSS knowledge.
 
 Since the app is designed to work as a static web page I put it on GitHub Pages. It's fully functional from there.
 
-**[GitHub Pages link](https://skwiwel.github.io/ride-ambience/src/index.html)**
+**[GitHub Pages link](https://skwiwel.github.io/ride-ambience/dist/index.html)**
 
 
 ## Inner workings
