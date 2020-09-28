@@ -1,11 +1,19 @@
+import {videoModule} from './videoModule.js';
+import {GetYouTubeID} from './GetYouTubeID.js';
+import {loadScript} from './loadScript.js';
+
 var updateTimeIntervalID;
 
-// This code loads the IFrame Player API code asynchronously.
-var tag = document.createElement("script");
+loadScript("https://www.youtube.com/iframe_api", "YT");
 
-tag.src = "https://www.youtube.com/iframe_api";
-var firstScriptTag = document.getElementsByTagName("script")[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+// Loading the YT iframe script the CommonJS modules way causes weird shenanigans.
+// For this reason onYouTubeIframeAPIReady() is called manually after making sure the script loaded.
+var checkYT = setInterval(function () {
+  if(YT && YT.loaded){
+      onYouTubeIframeAPIReady();
+      clearInterval(checkYT);
+  }
+}, 100);
 
 // This function creates an <iframe> (and YouTube player)
 // after the API code downloads.

@@ -1,3 +1,6 @@
+import {CheckboxButton} from './CheckboxButton.js';
+import {globalSettings} from './globalSettings.js';
+
 var mainMenu = new (function () {
   const container = document.getElementById("main-menu-container");
   const buttonSettings = new CheckboxButton(

@@ -1,3 +1,12 @@
+import {globalSettings} from './globalSettings.js';
+import {CheckboxButton} from './CheckboxButton.js';
+import {EmittingVariable} from './EmittingVariable.js';
+import {formatTime} from './formatTime.js';
+import {videoModule} from './videoModule.js';
+import {radioModule} from './radioModule.js';
+import {applyTextAutoscroll} from './applyTextAutoscroll.js';
+import {GetYouTubeID} from './GetYouTubeID.js';
+
 var settingsWindow = new (function () {
   const container = document.getElementById("settings-container");
 
@@ -13,7 +22,7 @@ var settingsWindow = new (function () {
   /*  Applies logic to the tabs.
    *  For each button inside the "settings-tab-selector-container" a
    *  corresponding tab div is searched for. */
-  currTab = new EmittingVariable("video-list");
+  var currTab = new EmittingVariable("video-list");
 
   var tabSelectors = document.querySelectorAll(
     "#settings-tab-selector-container > button"
@@ -60,7 +69,7 @@ var settingsWindow = new (function () {
   videoListTabContainer._ra_initFunction = function () {
     var tempString = "";
     for (const video in videoModule.list) {
-      vid = videoModule.list[`${video}`];
+      var vid = videoModule.list[`${video}`];
       tempString +=
         '<div class="list-object">' +
         '<div class="video-list-title text-autoscroll"><span>' +
@@ -76,12 +85,12 @@ var settingsWindow = new (function () {
         vid.weight +
         "</div>" +
         '<div class="list-play">' +
-        '<button class="menu-item" onclick=settingsWindow.videoPlay("' +
+        '<button class="menu-item" onclick=videoPlay("' +
         video +
         '")><span class="jam jam-play"/></button>' +
         "</div>" +
         '<div class="list-object-delete">' +
-        '<button class="menu-item" onclick=settingsWindow.videoDelete("' +
+        '<button class="menu-item" onclick=videoDelete("' +
         video +
         '")><span class="jam jam-close"/></button>' +
         "</div></div>";
@@ -94,14 +103,16 @@ var settingsWindow = new (function () {
   this.videoDelete = function (id) {
     if (videoModule.delete(id)) videoListTabContainer._ra_initFunction();
   };
+  window.videoDelete = this.videoDelete;
   this.videoPlay = function (id) {
     videoModule.currentVideo.set(videoModule.list[id]);
     videoModule.playing.set(true);
   };
+  window.videoPlay = this.videoPlay;
   function videoAdd() {
     var url = videoAddInput.value;
     if (url == "") return;
-    id = GetYouTubeID(url);
+    var id = GetYouTubeID(url);
     var result = videoModule.add(id);
     videoAddInput.placeholder = result;
     videoAddInput.value = "";
@@ -134,7 +145,7 @@ var settingsWindow = new (function () {
         '<div class="list-object">' +
         '<div class="radio-list-name"><input type="text" value="' +
         (radio.name == undefined ? "" : radio.name) +
-        '" oninput=\'settingsWindow.radioChangeName("' +
+        '" oninput=\'radioChangeName("' +
         radio.url +
         '", this.value);\' spellcheck="false"></div>' +
         '<div class="radio-list-url text-autoscroll"><a href="' +
@@ -143,12 +154,12 @@ var settingsWindow = new (function () {
         urlShort +
         "</a></div>" +
         '<div class="list-play">' +
-        '<button class="menu-item" onclick=settingsWindow.radioPlay("' +
+        '<button class="menu-item" onclick=radioPlay("' +
         radio.url +
         '")><span class="jam jam-play"/></button>' +
         "</div>" +
         '<div class="list-object-delete">' +
-        '<button class="menu-item" onclick=settingsWindow.radioDelete("' +
+        '<button class="menu-item" onclick=radioDelete("' +
         radio.url +
         '")><span class="jam jam-close"/></button>' +
         "</div></div>";
@@ -162,12 +173,15 @@ var settingsWindow = new (function () {
   this.radioDelete = function (url) {
     if (radioModule.deleteByURL(url)) radioListTabContainer._ra_initFunction();
   };
+  window.radioDelete = this.radioDelete;
   this.radioPlay = function (url) {
     radioModule.playByURL(url);
   };
+  window.radioPlay = this.radioPlay;
   this.radioChangeName = function (url, name) {
     radioModule.changeNameByURL(url, name);
   };
+  window.radioChangeName = this.radioChangeName;
   function radioAdd() {
     var url = radioAddInput.value;
     if (url == "") return;

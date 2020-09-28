@@ -3,7 +3,7 @@
  * @param {String} id - html id of the button element
  * @param {EmittingVariable} setting - an EmittingVariable object
  */
-function CheckboxButton(id, setting) {
+export function CheckboxButton(id, setting) {
   const button = document.getElementById(id);
   button.onclick = function () {
     setting.set(!setting.get());

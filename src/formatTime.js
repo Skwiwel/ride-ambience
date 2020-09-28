@@ -1,4 +1,4 @@
-function formatTime(time) {
+export function formatTime(time) {
   if (time == undefined) return "-";
   time = Math.round(time);
 
