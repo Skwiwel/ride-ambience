@@ -6,7 +6,7 @@ export function GetYouTubeID(url) {
   if (url[2] !== undefined) {
     id = url[2].split(/[^0-9a-z_\-]/i)[0];
   } else {
-    id = url;
+    id = url[0];
   }
   return id;
 }
