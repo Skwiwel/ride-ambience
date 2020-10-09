@@ -67,7 +67,6 @@ function adjustVolumeToRelative(globalVolume) {
   var volumeAdjustedToRelative = globalVolume;
   if (videoModule.currentVideo.get().relativeVolume !== undefined)
     var volumeAdjustedToRelative = volumeAdjustedToRelative * videoModule.currentVideo.get().relativeVolume;
-  console.log("video volume: "+globalVolume+"\nrelativeVolume: "+ videoModule.currentVideo.get().relativeVolume + "\nadjustedVolume: "+volumeAdjustedToRelative);
   return volumeAdjustedToRelative;
 }
 
