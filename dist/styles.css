@@ -289,13 +289,19 @@ button#radio-volume:hover + #radio-volume-slider-container,
   flex: 0 0 auto;
   display: flex;
   flex-direction: row;
-  height: 20px;
+  height: 30px;
   width: 100%;
-  font-size: 12px;
+  text-align: center;
+  font-size: 11px;
+  line-height: 30px;
   color: grey;
-  line-height: 20px;
   background-color: var(--submenu-hover-color);
 }
+
+.list-header > .video-list-relativeVolume {
+  line-height: 15px;
+}
+
 .list-container {
   flex: 1 1 auto;
   overflow: auto;
@@ -359,9 +365,9 @@ button#radio-volume:hover + #radio-volume-slider-container,
   width: calc(11ch + 20px);
   font-family: "Lucida Console", Monaco, monospace;
 }
-.video-list-start {
+.video-list-relativeVolume {
   flex: 0 0 auto;
-  width: 40px;
+  width: 60px;
 }
 .video-list-weight {
   flex: 0 0 auto;

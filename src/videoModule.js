@@ -82,6 +82,17 @@ export var videoModule = new (function () {
     this.save();
   };
 
+  this.changeRelativeVolume = function (id, relativeVolume) {
+    if (_this.list[id] === undefined) return;
+    if (relativeVolume < 0 || relativeVolume > 1.0) return;
+    _this.list[id].relativeVolume = relativeVolume;
+    if (id == _this.currentVideo.get().id) {
+      _this.currentVideo.set(_this.currentVideo.get());
+      _this.volume.set(_this.volume.get())
+    }
+    _this.save()
+  };
+
   this.getVideoStart = function (videoId) {
     if (this.list[videoId] == undefined) {
       return 0;
