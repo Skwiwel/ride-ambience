@@ -41,37 +41,49 @@ function onYouTubeIframeAPIReady() {
 // The API will call this function when the video player is ready.
 function onPlayerReady(event) {
   player.playVideo();
+  updateVolume();
   player.seekTo(videoModule.currentVideo.get().start);
-  // Listen to video changes, but only after being ready (onPlayerReady)
+  initializeVideoChangeListening()
+}
+
+function initializeVideoChangeListening() {
   videoModule.currentVideo.addListener(function (video) {
     // Don't change video if it's the same as currently playing
     if (video.id == GetYouTubeID(player.getVideoUrl())) return;
+    // Videos have different relative volumes and thus volume has to be updated with each video change
+    updateVolume()
     player.cueVideoById(video.id, video.start);
     if (videoModule.playing.get()) player.playVideo();
   });
 }
 
-function updateTime() {
-  videoModule.time.set({
-    current: player.getCurrentTime(),
-    end: player.getDuration(),
-  });
+function updateVolume(globalVolume = videoModule.volume.get()) {
+  var volumeAdjustedToRelative = adjustVolumeToRelative(globalVolume);
+  if (volumeAdjustedToRelative == player.getVolume() * 100) return;
+  player.setVolume(volumeAdjustedToRelative * 100);
 }
 
-videoModule.playing.addListener(function (playing) {
-  if (playing) player.playVideo();
-  else player.pauseVideo();
-});
+function adjustVolumeToRelative(globalVolume) {
+  var volumeAdjustedToRelative = globalVolume;
+  if (videoModule.currentVideo.get().relativeVolume !== undefined)
+    var volumeAdjustedToRelative = volumeAdjustedToRelative * videoModule.currentVideo.get().relativeVolume;
+  console.log("video volume: "+globalVolume+"\nrelativeVolume: "+ videoModule.currentVideo.get().relativeVolume + "\nadjustedVolume: "+volumeAdjustedToRelative);
+  return volumeAdjustedToRelative;
+}
 
 videoModule.volume.addListener(function (volume) {
-  if (volume == player.getVolume() * 100) return;
-  player.setVolume(volume * 100);
+  updateVolume(volume);
 });
 
 videoModule.muted.addListener(function (muted) {
   if (muted == player.isMuted()) return;
   if (muted) player.mute();
   else player.unMute();
+});
+
+videoModule.playing.addListener(function (playing) {
+  if (playing) player.playVideo();
+  else player.pauseVideo();
 });
 
 videoModule.time.addListener(function (time) {
@@ -114,4 +126,11 @@ function onPlayerStateChange(event) {
     default:
       clearInterval(updateTimeIntervalID);
   }
+}
+
+function updateTime() {
+  videoModule.time.set({
+    current: player.getCurrentTime(),
+    end: player.getDuration(),
+  });
 }
