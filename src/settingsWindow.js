@@ -80,7 +80,7 @@ var settingsWindow = new (function () {
         '">' +
         video +
         '</a></div><div class="video-list-relativeVolume"><input type="range" value="' +
-        (vid.relativeVolume === undefined ? "20" : vid.relativeVolume*100) +
+        (vid.relativeVolume === undefined ? "100" : vid.relativeVolume*100) +
         '" oninput=\'videoChangeRelativeVolume("' +
         video +
         '", this.value);\'></div>' + 

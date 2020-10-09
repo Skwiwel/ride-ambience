@@ -189,6 +189,11 @@ export var videoModule = new (function () {
               _this.list[`${video}`] = list[`${video}`];
               _this.list[`${video}`].id = video;
             }
+            for (const property in list[`${video}`]) {
+              if (_this.list[`${video}`][`${property}`] === undefined) {
+                _this.list[`${video}`][`${property}`] = list[`${video}`][`${property}`];
+              }
+            }
           }
           setCookie("VideoList", JSON.stringify(_this.list));
         }
@@ -216,8 +221,8 @@ export var videoModule = new (function () {
       ) {
         _this.list[`${video}`].start = _this.list[`${video}`].startDefault;
       }
-      if (_this.list[`${video}`].volumeMult === undefined) {
-        _this.list[`${video}`].volumeMult = 1.0;
+      if (_this.list[`${video}`].relativeVolume === undefined) {
+        _this.list[`${video}`].relativeVolume = 1.0;
       }
     }
     _this.save();
