@@ -79,9 +79,12 @@ var settingsWindow = new (function () {
         video +
         '">' +
         video +
-        '</a></div><div class="video-list-start">' +
-        formatTime(vid.startDefault) +
-        '</div><div class="video-list-weight">' +
+        '</a></div><div class="video-list-relativeVolume"><input type="range" value="' +
+        (vid.relativeVolume === undefined ? "20" : vid.relativeVolume*100) +
+        '" oninput=\'videoChangeRelativeVolume("' +
+        video +
+        '", this.value);\'></div>' + 
+        '<div class="video-list-weight">' +
         vid.weight +
         "</div>" +
         '<div class="list-play">' +
@@ -99,6 +102,10 @@ var settingsWindow = new (function () {
     applyTextAutoscroll(videoListContainer);
     videoAddInput.placeholder = "Enter a YouTube url here to add a video";
   };
+  window.videoChangeRelativeVolume = function (id, relativeVolume) {
+    let volumeAdjustedForRange = relativeVolume / 100;
+    videoModule.changeRelativeVolume(id, volumeAdjustedForRange);
+  }
   /* Video List tab helper functions */
   this.videoDelete = function (id) {
     if (videoModule.delete(id)) videoListTabContainer._ra_initFunction();

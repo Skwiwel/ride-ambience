@@ -4,7 +4,7 @@ import {globalSettings} from './globalSettings.js';
 import {GetYouTubeID} from './GetYouTubeID.js';
 
 const videoListFileURL =
-  "https://raw.githubusercontent.com/Skwiwel/ride-ambience/master/public/video_presets.json";
+  "../public/video_presets.json";
 
 export var videoModule = new (function () {
   var _this = this;
@@ -80,6 +80,17 @@ export var videoModule = new (function () {
     if (this.list[videoId].weight > 2) this.list[videoId].weight = 2;
 
     this.save();
+  };
+
+  this.changeRelativeVolume = function (id, relativeVolume) {
+    if (_this.list[id] === undefined) return;
+    if (relativeVolume < 0 || relativeVolume > 1.0) return;
+    _this.list[id].relativeVolume = relativeVolume;
+    if (id == _this.currentVideo.get().id) {
+      _this.currentVideo.set(_this.currentVideo.get());
+      _this.volume.set(_this.volume.get())
+    }
+    _this.save()
   };
 
   this.getVideoStart = function (videoId) {
