@@ -159,57 +159,93 @@ export var radioModule = new (function () {
 
   // Init
   {
+    loadSavedList();
+    setLastSavedID();
+    downloadAndIntegratePresetListsIfNotDisabled();
+
+    initializeRadio();
+
+    setRadioState();
+  }
+
+  function loadSavedList() {
     var cookieContentString = getCookie("RadioList");
     if (cookieContentString != "") {
       _this.list = JSON.parse(cookieContentString);
     }
-    /* Load the preset list from site if presetFetch is enabled */
-    if (
-      globalSettings.preset.get().localeCompare("Custom") != 0 &&
-      globalSettings.presetFetch.get()
-    ) {
-      var rawFile = new XMLHttpRequest();
-      rawFile.open("GET", radioListFileURL, false);
-      rawFile.onload = function () {
-        if (
-          rawFile.readyState === 4 &&
-          (rawFile.status === 200 || rawFile.status == 0)
-        ) {
-          var rawText = rawFile.responseText;
-          var presets = JSON.parse(rawText);
-          var list = presets[globalSettings.preset.get()].list;
-          list.forEach((link) => {
-            if (link.url === undefined || link.url == "") return;
-            // if the id is new to the cookie add it
-            if (_this.list.some((e) => e.url == link.url) == false) {
-              _this.list.push(link);
-            }
-          });
-          _this.list.sort((e1, e2) => e1.name.localeCompare(e2.name));
-          _this.save();
-          // Set default radio
+  }
+
+  function setLastSavedID() {
+    let lastSavedID = getLastSavedID();
+    if (isValidID(lastSavedID))
+      currentID = lastSavedID;
+  }  
+
+  function isValidID(id) {
+    return (Number.isInteger(id) && id >= 0);
+  }
+
+  function getLastSavedID() {
+    var savedID = -1;
+    var cookieContentString = getCookie("radioListLastPlayed");
+    if (cookieContentString != "") {
+      savedID = _this.list.findIndex((e) => e.url == cookieContentString);
+    }
+    return savedID;
+  }
+
+  function downloadAndIntegratePresetListsIfNotDisabled() {
+    if (!shouldDownloadPresetLists())
+      return;
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", radioListFileURL, false);
+    rawFile.onload = function () {
+      if (
+        rawFile.readyState === 4 &&
+        (rawFile.status === 200 || rawFile.status == 0)
+      ) {
+        var rawText = rawFile.responseText;
+        var presets = JSON.parse(rawText);
+        var list = presets[globalSettings.preset.get()].list;
+        list.forEach((link) => {
+          if (link.url === undefined || link.url == "") return;
+          // if the id is new to the cookie add it
+          if (_this.list.some((e) => e.url == link.url) == false) {
+            _this.list.push(link);
+          }
+        });
+        _this.list.sort((e1, e2) => e1.name.localeCompare(e2.name));
+        _this.save();
+        // Set default radio
+        if (!isValidID(currentID)){
           let defaultURL = presets[globalSettings.preset.get()].default;
-          currentID = _this.list.findIndex((e) => e.url == defaultURL);
-        }
+          let defaultID = _this.list.findIndex((e) => e.url == defaultURL);
+          if (isValidID(defaultID))
+            currentID = defaultID;            
+        }        
       };
       rawFile.send(null);
     }
+  }
 
-    var cookieContentString = getCookie("radioListLastPlayed");
-    if (cookieContentString != "") {
-      let savedID = _this.list.findIndex((e) => e.url == cookieContentString);
-      currentID = savedID != -1 ? savedID : currentID;
-    }
-    /* set initial value of 0 if there is an incorrect one in the cookie */
-    if (currentID == -1) currentID = 0;
+  function shouldDownloadPresetLists() {
+    return (
+      globalSettings.preset.get().localeCompare("Custom") != 0 && globalSettings.presetFetch.get());
+  }
 
+  function initializeRadio() {
+    if (!isValidID(currentID))
+      currentID = 0;
     _this.currentAudio.set(_this.list[currentID]);
+  }
 
+  function setRadioState() {
     var cookieContentFloat = parseFloat(getCookie("radioVolume"));
     _this.volume.set(isNaN(cookieContentFloat) ? 0.3 : cookieContentFloat);
-    cookieContentString = getCookie("radioMuted");
+    var cookieContentString = getCookie("radioMuted");
     _this.muted.set(cookieContentString == "true" ? true : false);
     cookieContentString = getCookie("radioPlay");
     _this.playing.set(cookieContentString == "false" ? false : true);
   }
+
 })();
