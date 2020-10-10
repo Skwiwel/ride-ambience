@@ -8,10 +8,11 @@ loadScript("https://www.youtube.com/iframe_api", "YT");
 
 // Loading the YT iframe script the CommonJS modules way causes weird shenanigans.
 // For this reason onYouTubeIframeAPIReady() is called manually after making sure the script loaded.
-var checkYT = setInterval(function () {
+var waitForYTScriptLoad = setInterval(function () {
   if(YT && YT.loaded){
       onYouTubeIframeAPIReady();
-      clearInterval(checkYT);
+      clearInterval(waitForYTScriptLoad);
+      YTPlayerStartAssist();
   }
 }, 100);
 
@@ -40,9 +41,9 @@ function onYouTubeIframeAPIReady() {
 }
 // The API will call this function when the video player is ready.
 function onPlayerReady(event) {
-  player.playVideo();
   updateVolume();
   player.seekTo(videoModule.currentVideo.get().start);
+  player.playVideo();
   initializeVideoChangeListening()
 }
 
@@ -132,4 +133,50 @@ function updateTime() {
     current: player.getCurrentTime(),
     end: player.getDuration(),
   });
+}
+
+function YTPlayerStartAssist() {
+  var timesEncounteredRunningCorrectly = 0;
+  var probeInterval = setInterval(function() {
+    if (player.getPlayerState === undefined) {
+      console.log("YT Player start assist probe:\nplayer not initialized");
+      return;
+    }
+    var playerState = player.getPlayerState();
+    switch (playerState) {
+      case YT.PlayerState.UNSTARTED:
+        logState(playerState);
+        break;
+      case YT.PlayerState.ENDED:
+        logState(playerState);
+        break;
+      case YT.PlayerState.PLAYING:
+        timesEncounteredRunningCorrectly++;
+        break;
+      case YT.PlayerState.PAUSED:
+        if (videoModule.playing.get() == false)
+          timesEncounteredRunningCorrectly++;
+        else
+          player.playVideo();
+        break;
+      case YT.PlayerState.BUFFERING:
+        logState(playerState);
+        break;
+      default:
+        break;
+    }
+    if (timesEncounteredRunningCorrectly >= 5)
+      clearInterval(probeInterval);
+  }, 500);
+
+  function logState(playerState) {
+    var enumName;
+    for (var name in YT.PlayerState) {
+      if (YT.PlayerState[name] == playerState) {
+        enumName = name;
+        break;
+      }
+    }
+    console.log("YT Player start assist probe:\nencountered state "+enumName);
+  }
 }
