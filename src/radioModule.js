@@ -201,7 +201,7 @@ export var radioModule = new (function () {
 
   function downloadAndIntegratePresetListsIfNotDisabled(radioLoadedEventVar) {
     if (!shouldDownloadPresetLists()) {
-      radioLoadedEventVar.set(True);
+      radioLoadedEventVar.set(true);
       return;
     }
     var rawFile = new XMLHttpRequest();
@@ -231,7 +231,7 @@ export var radioModule = new (function () {
             currentID = defaultID;            
         }     
       };
-      radioLoadedEventVar.set(True);
+      radioLoadedEventVar.set(true);
     }
     rawFile.send(null);
   }
