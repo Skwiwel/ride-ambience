@@ -161,11 +161,16 @@ export var radioModule = new (function () {
   {
     loadSavedList();
     setLastSavedID();
-    downloadAndIntegratePresetListsIfNotDisabled();
 
-    initializeRadio();
+    var radiosDownloaded = new EmittingVariable(false);
+    radiosDownloaded.addListener(function (loaded) {
+      if (loaded) {
+        initializeRadio();
+        setRadioState();
+      }
+    })
 
-    setRadioState();
+    downloadAndIntegratePresetListsIfNotDisabled(radiosDownloaded);
   }
 
   function loadSavedList() {
@@ -194,9 +199,11 @@ export var radioModule = new (function () {
     return savedID;
   }
 
-  function downloadAndIntegratePresetListsIfNotDisabled() {
-    if (!shouldDownloadPresetLists())
+  function downloadAndIntegratePresetListsIfNotDisabled(radioLoadedEventVar) {
+    if (!shouldDownloadPresetLists()) {
+      radioLoadedEventVar.set(True);
       return;
+    }
     var rawFile = new XMLHttpRequest();
     rawFile.open("GET", radioListFileURL, false);
     rawFile.onload = function () {
@@ -222,10 +229,11 @@ export var radioModule = new (function () {
           let defaultID = _this.list.findIndex((e) => e.url == defaultURL);
           if (isValidID(defaultID))
             currentID = defaultID;            
-        }        
+        }     
       };
-      rawFile.send(null);
+      radioLoadedEventVar.set(True);
     }
+    rawFile.send(null);
   }
 
   function shouldDownloadPresetLists() {
@@ -236,7 +244,10 @@ export var radioModule = new (function () {
   function initializeRadio() {
     if (!isValidID(currentID))
       currentID = 0;
-    _this.currentAudio.set(_this.list[currentID]);
+    if (_this.list.length > 0)
+      _this.currentAudio.set(_this.list[currentID]);
+    else
+      console.log("Error: Failed to load any radios")
   }
 
   function setRadioState() {
