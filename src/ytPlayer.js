@@ -42,7 +42,7 @@ function onYouTubeIframeAPIReady() {
 function onPlayerReady(event) {
   updateVolume();
   player.seekTo(videoModule.currentVideo.get().start);
-  player.playVideo();
+  //player.playVideo();
   initializeVideoChangeListening()
 }
 
