@@ -175,7 +175,7 @@ export var videoModule = new (function () {
       globalSettings.presetFetch.get()
     ) {
       var rawFile = new XMLHttpRequest();
-      rawFile.open("GET", videoListFileURL);
+      rawFile.open("GET", videoListFileURL, false);
       rawFile.onload = function () {
         if (
           rawFile.readyState === 4 &&
