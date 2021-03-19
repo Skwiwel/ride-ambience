@@ -22,7 +22,7 @@ export var radioModule = new (function () {
   this.list = [];
 
   var currentID = -1;
-  this.playing = new EmittingVariable(true);
+  this.playing = new EmittingVariable(false);
   /* Contains a RadioLink or an empty object if there are none on the list */
   this.currentAudio = new EmittingVariable({});
   this.volume = new EmittingVariable(0.3);

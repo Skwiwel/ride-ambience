@@ -28,7 +28,7 @@ export var videoModule = new (function () {
   const defaultVideoStartTime = 30;
   var presets = {};
 
-  this.playing = new EmittingVariable(true);
+  this.playing = new EmittingVariable(false);
   /* Contains a RadioLink or an empty object if there are none on the list */
   this.currentVideo = new EmittingVariable({});
   this.volume = new EmittingVariable(1.0);

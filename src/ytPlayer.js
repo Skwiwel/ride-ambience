@@ -12,7 +12,6 @@ var waitForYTScriptLoad = setInterval(function () {
   if(YT && YT.loaded){
       onYouTubeIframeAPIReady();
       clearInterval(waitForYTScriptLoad);
-      YTPlayerStartAssist();
   }
 }, 100);
 
@@ -26,7 +25,7 @@ function onYouTubeIframeAPIReady() {
     videoId: videoModule.currentVideo.get().id,
     playerVars: {
       fs: 0,
-      autoplay: 1,
+      autoplay: 0,
       controls: 0,
       enablejsapi: 1,
       iv_load_policy: 3,
@@ -133,50 +132,4 @@ function updateTime() {
     current: player.getCurrentTime(),
     end: player.getDuration(),
   });
-}
-
-function YTPlayerStartAssist() {
-  var timesEncounteredRunningCorrectly = 0;
-  var probeInterval = setInterval(function() {
-    if (player.getPlayerState === undefined) {
-      console.log("YT Player start assist probe:\nplayer not initialized");
-      return;
-    }
-    var playerState = player.getPlayerState();
-    switch (playerState) {
-      case YT.PlayerState.UNSTARTED:
-        logState(playerState);
-        break;
-      case YT.PlayerState.ENDED:
-        logState(playerState);
-        break;
-      case YT.PlayerState.PLAYING:
-        timesEncounteredRunningCorrectly++;
-        break;
-      case YT.PlayerState.PAUSED:
-        if (videoModule.playing.get() == false)
-          timesEncounteredRunningCorrectly++;
-        else
-          player.playVideo();
-        break;
-      case YT.PlayerState.BUFFERING:
-        logState(playerState);
-        break;
-      default:
-        break;
-    }
-    if (timesEncounteredRunningCorrectly >= 5)
-      clearInterval(probeInterval);
-  }, 500);
-
-  function logState(playerState) {
-    var enumName;
-    for (var name in YT.PlayerState) {
-      if (YT.PlayerState[name] == playerState) {
-        enumName = name;
-        break;
-      }
-    }
-    console.log("YT Player start assist probe:\nencountered state "+enumName);
-  }
 }

@@ -8,4 +8,5 @@ import './settingsWindow.js';
 import './radioControls.js';
 import './videoControls.js';
 import './ytPlayer.js';
+import './startButton.js';
 import './userActivityManager.js';

@@ -13,6 +13,9 @@ export function EmittingVariable(val = undefined) {
   };
   this.removeListener = function (fun) {
     const index = listeners.indexOf(fun);
-    if (index > -1) listeners.splice(index, 1);
+    if (index > -1)
+      listeners.splice(index, 1);
+    else
+      console.log("Attempted to remove a listener not present in the emitting variable list: ", fun);
   };
 }
