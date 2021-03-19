@@ -41,8 +41,8 @@ function onYouTubeIframeAPIReady() {
 // The API will call this function when the video player is ready.
 function onPlayerReady(event) {
   updateVolume();
+  playPause(videoModule.playing.get());
   player.seekTo(videoModule.currentVideo.get().start);
-  //player.playVideo();
   initializeVideoChangeListening()
 }
 
@@ -80,10 +80,11 @@ videoModule.muted.addListener(function (muted) {
   else player.unMute();
 });
 
-videoModule.playing.addListener(function (playing) {
-  if (playing) player.playVideo();
+function playPause(shouldPlay) {
+  if (shouldPlay) player.playVideo();
   else player.pauseVideo();
-});
+}
+videoModule.playing.addListener(playPause);
 
 videoModule.time.addListener(function (time) {
   let playerTime = player.getCurrentTime();
