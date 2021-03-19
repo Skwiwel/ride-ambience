@@ -9,7 +9,7 @@ loadScript("https://www.youtube.com/iframe_api", "YT");
 // Loading the YT iframe script the CommonJS modules way causes weird shenanigans.
 // For this reason onYouTubeIframeAPIReady() is called manually after making sure the script loaded.
 var waitForYTScriptLoad = setInterval(function () {
-  if(YT && YT.loaded){
+  if(typeof YT !== 'undefined' && YT.loaded){
       onYouTubeIframeAPIReady();
       clearInterval(waitForYTScriptLoad);
   }
