@@ -169,7 +169,6 @@ export var radioModule = new (function () {
         setRadioState();
       }
     })
-
     downloadAndIntegratePresetListsIfNotDisabled(radiosDownloaded);
   }
 
@@ -205,7 +204,7 @@ export var radioModule = new (function () {
       return;
     }
     var rawFile = new XMLHttpRequest();
-    rawFile.open("GET", radioListFileURL, false);
+    rawFile.open("GET", radioListFileURL);
     rawFile.onload = function () {
       if (
         rawFile.readyState === 4 &&
