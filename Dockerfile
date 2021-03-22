@@ -9,4 +9,4 @@ RUN  sed -i.bak 's/\(listen.*\)80/\18081/' /etc/nginx/conf.d/default.conf \
      
 EXPOSE 8081
 
-COPY src/ /usr/share/nginx/html
+COPY ./ /usr/share/nginx/html
