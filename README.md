@@ -1,5 +1,6 @@
 # Ride Ambience
 
+> Kind of broke with time
 
 A static web app combining YouTube video with radio. It includes a preset playlist and radio list. The playlists can include any kind of videos, but the app was originally intended to include a playlist of a calm ride through some area. The app is designed to provide some background noise while the user is doing some other stuff (kind of like a TV).
 
